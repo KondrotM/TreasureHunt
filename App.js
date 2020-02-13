@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   }
-	}
 });
 
 function HomeScreen({ navigation }) {
@@ -69,6 +68,8 @@ function MapScreen() {
       />
     </View>
   )
+}
+
 function RegisterScreen(){
 	return (
 			<View style={styles.container}>
@@ -88,7 +89,6 @@ function SocialScreen() {
 }
 
 export default function App() {
-export default function BottomTabs() {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -118,21 +118,6 @@ export default function BottomTabs() {
         <Tab.Screen name="Social" component={SocialScreen} />
 				<Tab.Screen name="Register" component={RegisterScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options=
-          {{
-            headerStyle: {backgroundColor: '#3d3522'},
-            headerTintColor: '#fff',
-          }} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
     </NavigationContainer>
   );
 }
