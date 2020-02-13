@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
 
 // Import elements
@@ -32,6 +32,19 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%'
+  },
+  mapInfoText: {
+    backgroundColor: "rgba(0,0,0,0.4)",
+    textShadowColor: "#000",
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 16,
+    color: '#fff',
+    zIndex: 9999,
+    position: "absolute",
+    top: 42.5,
+    left: 0,
+    right: 0,
+    padding: 16
   }
 });
 
@@ -53,31 +66,57 @@ function CreateScreen() {
   );
 }
 
-function MapScreen() {
-  return (
-    <View style={styles.container}>
-      
-      <MapView
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        style={styles.map}
-      />
-    </View>
-  )
+// With thanks to https://stackoverflow.com/questions/41139643/react-native-how-to-change-text-value-dynamically for teaching me React Native state management
+export class MapScreen extends Component {
+  constructor() {
+    super()
+    this.state = {
+      mapCoords: {
+        latitude: 51.888106,
+        longitude: -2.088446,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      }
+    }
+  }
+  render() {
+    return (
+      <View style={styles.container}>
+        <MapView
+          initialRegion={{
+            latitude: 51.888106,
+            longitude: -2.088446,
+            
+            // The deltas are used for the zoom level.
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          }}
+          style={styles.map}
+          onRegionChangeComplete={(newCoords) => this.setState({mapCoords: newCoords})}
+        />
+        <Text style={styles.mapInfoText}>Coords: {this.state.mapCoords.latitude.toPrecision(16)}, {this.state.mapCoords.longitude.toPrecision(16)}</Text>
+      </View>
+    )  
+  }
 }
 
-function RegisterScreen() {
-	return (
+export class RegisterScreen extends Component {
+  constructor() {
+    super()
+    this.state = {
+      email: "",
+    }
+  }
+
+  render() {
+    return (
 			<View style={styles.container}>
-					<TextInput style={styles.text}
-							placeholder='Name here'
-					/>
+				<TextInput style={styles.text}
+					placeholder='Name here'
+				/>
 			</View>
-	);
+	  );
+  }
 }
 
 function SocialScreen() {
@@ -88,41 +127,54 @@ function SocialScreen() {
   );
 }
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-      // Colours
-        tabBarOptions={{
-            activeTintColor: '#000', inactiveTintColor: '#777', activeBackgroundColor: '#caf7e2', inactiveBackgroundColor: '#caf7e2'
-        }}
+export default class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      mapCoords: {
+        latitude: 51.888106,
+        longitude: -2.088446,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      }
+    }
+  }
+  render() {
+    return (
+      <NavigationContainer>
+        <Tab.Navigator
+        // Colours
+          tabBarOptions={{
+              activeTintColor: '#000', inactiveTintColor: '#777', activeBackgroundColor: '#caf7e2', inactiveBackgroundColor: '#caf7e2'
+          }}
 
-      // Icons
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+        // Icons
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === "Home") {
-              iconName = focused ? 'home' : 'home';
-            } else if (route.name === "Map") {
-              iconName = focused ? 'map' : 'map-o';
-            } else if (route.name === "Create") {
-              iconName = focused ? 'plus-square' : 'plus-square-o';
-            } else if (route.name === "Social") {
-              iconName = focused ? 'user' : 'user-o';
-            } else if (route.name === "Register") {
-              iconName = focused ? 'pencil-square' : 'pencil-square-o';
+              if (route.name === "Home") {
+                iconName = focused ? 'home' : 'home';
+              } else if (route.name === "Map") {
+                iconName = focused ? 'map' : 'map-o';
+              } else if (route.name === "Create") {
+                iconName = focused ? 'plus-square' : 'plus-square-o';
+              } else if (route.name === "Social") {
+                iconName = focused ? 'user' : 'user-o';
+              } else if (route.name === "Register") {
+                iconName = focused ? 'pencil-square' : 'pencil-square-o';
+              }
+
+              return <FontAwesome name={iconName} color={color} size={size} />
             }
-
-            return <FontAwesome name={iconName} color={color} size={size} />
-          }
-        })}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Create" component={CreateScreen} />
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="Social" component={SocialScreen} />
-				<Tab.Screen name="Register" component={RegisterScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+          })}>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Create" component={CreateScreen} />
+          <Tab.Screen name="Map" component={MapScreen} />
+          <Tab.Screen name="Social" component={SocialScreen} />
+				  <Tab.Screen name="Register" component={RegisterScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
