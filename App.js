@@ -9,6 +9,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Iconography
 import { FontAwesome } from '@expo/vector-icons';
 
+// Map
+import MapView from 'react-native-maps';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -21,6 +24,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
+  },
+  // Make the map fill the page
+  map: {
+    width: '100%',
+    height: '100%'
   }
 });
 
@@ -41,6 +49,23 @@ function CreateScreen() {
   );
 }
 
+function MapScreen() {
+  return (
+    <View style={styles.container}>
+      
+      <MapView
+        region={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        style={styles.map}
+      />
+    </View>
+  )
+}
+
 function SocialScreen() {
   return (
     <View style={styles.container}>
@@ -49,7 +74,7 @@ function SocialScreen() {
   );
 }
 
-export default function BottomTabs() {
+export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -65,6 +90,8 @@ export default function BottomTabs() {
 
             if (route.name === "Home") {
               iconName = focused ? 'map' : 'map-o';
+            } else if (route.name === "Map") {
+              iconName = focused ? 'map' : 'map-o';
             } else if (route.name === "Create") {
               iconName = focused ? 'plus-square' : 'plus-square-o';
             } else if (route.name === "Social") {
@@ -75,24 +102,10 @@ export default function BottomTabs() {
           }
         })}>
         <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Create" component={CreateScreen} />
         <Tab.Screen name="Social" component={SocialScreen} />
       </Tab.Navigator>
-    </NavigationContainer>
-  );
-}
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} options=
-          {{
-            headerStyle: {backgroundColor: '#3d3522'},
-            headerTintColor: '#fff',
-          }} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
     </NavigationContainer>
   );
 }
