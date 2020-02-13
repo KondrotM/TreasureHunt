@@ -70,7 +70,7 @@ function MapScreen() {
   )
 }
 
-function RegisterScreen(){
+function RegisterScreen() {
 	return (
 			<View style={styles.container}>
 					<TextInput style={styles.text}
@@ -103,11 +103,15 @@ export default function App() {
             let iconName;
 
             if (route.name === "Home") {
+              iconName = focused ? 'home' : 'home';
+            } else if (route.name === "Map") {
               iconName = focused ? 'map' : 'map-o';
             } else if (route.name === "Create") {
               iconName = focused ? 'plus-square' : 'plus-square-o';
             } else if (route.name === "Social") {
               iconName = focused ? 'user' : 'user-o';
+            } else if (route.name === "Register") {
+              iconName = focused ? 'pencil-square' : 'pencil-square-o';
             }
 
             return <FontAwesome name={iconName} color={color} size={size} />
@@ -115,6 +119,7 @@ export default function App() {
         })}>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Create" component={CreateScreen} />
+        <Tab.Screen name="Map" component={MapScreen} />
         <Tab.Screen name="Social" component={SocialScreen} />
 				<Tab.Screen name="Register" component={RegisterScreen} />
       </Tab.Navigator>

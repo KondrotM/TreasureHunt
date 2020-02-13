@@ -1,4 +1,4 @@
 @echo off
 cd /d %~dp0
-npm start
+start /b npm start
 pause
