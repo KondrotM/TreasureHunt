@@ -28,7 +28,7 @@ function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>This is the Home screen</Text>
-      <Button title="Go to Details" onPress={() => navigation.navigate('Details')}></Button>
+      <Button title="Go to Create" onPress={() => navigation.navigate('Create')}></Button>
     </View>
   );
 }
