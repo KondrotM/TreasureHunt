@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
+import { Button, StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
 
 // Support for notches and display cutouts
 // https://reactnavigation.org/docs/en/handling-safe-area.html
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   formContainer: {
     alignSelf: 'center'
@@ -79,7 +79,10 @@ function HomeScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>This is the Home screen</Text>
       <Button title="Go to Create" onPress={() => navigation.navigate('Create')}></Button>
-	  <Button title="Go to Register" onPress={() => navigation.navigate('Register')}></Button>
+	    <Button title="Go to Register" onPress={() => navigation.navigate('Register')}></Button>
+      <Button title="Run fetch test" onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php?fn=username").then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
+      <Button title="Run fetch test 2" onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php?fn=InvalidFunctionName-jioewtjiogdsoifdsijofdsioj").then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
+      <Button title="Run fetch test 3" onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php").then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
     </SafeAreaView>
   );
 }
@@ -142,7 +145,7 @@ export class RegisterScreen extends Component {
 
   render() {
     return (
-			<SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.formContainer}>
           <Text style={styles.h1Text}>Username:</Text>
           <TextInput style={styles.textInput}
@@ -152,9 +155,10 @@ export class RegisterScreen extends Component {
           <Text style={styles.h1Text}>{"\n"}Email:</Text>
           <TextInput style={styles.textInput}
             placeholder='Tap here to enter your Email'
+            textContentType='emailAddress'
           />
         </View>
-      </SafeAreaView>
+      </ScrollView>
 	  );
   }
 }
