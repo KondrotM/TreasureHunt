@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
-
-// Import elements
-//import { Input } from 'react-native-elements';
+import { Button, StyleSheet, Text, View, TextInput, SafeAreaView } from 'react-native';
 
 // Navbar and headers
 import { NavigationContainer } from '@react-navigation/native';
@@ -23,10 +20,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
+  },
+  formContainer: {
+    alignSelf: 'center'
+  },
+  h1Text: {
+    fontSize: 24,
+    color: '#fff',
+    alignSelf: 'flex-start',
   },
   text: {
-    color: '#fff',
+    color: '#fff'
   },
   // Make the map fill the page
   map: {
@@ -45,24 +50,36 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     padding: 16
+  },
+  textInput: {
+    color: '#fff',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#fff',
+    padding: 8,
+    marginTop: 8,
+    marginBottom: 8,
+    alignSelf: 'flex-start',
+    minWidth: '75%',
+    maxWidth: '90%'
   }
 });
 
 function HomeScreen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.text}>This is the Home screen</Text>
       <Button title="Go to Create" onPress={() => navigation.navigate('Create')}></Button>
 	  <Button title="Go to Register" onPress={() => navigation.navigate('Register')}></Button>
-    </View>
+    </SafeAreaView>
   );
 }
 
 function CreateScreen() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.text}>This is the Create screen</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -85,7 +102,7 @@ export class MapScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <MapView
           initialRegion={{
             latitude: 51.888106,
@@ -100,7 +117,7 @@ export class MapScreen extends Component {
           //customMapStyle={this.customMapStyle}
         />
         <Text style={styles.mapInfoText}>Coords: {this.state.mapCoords.latitude.toPrecision(16)}, {this.state.mapCoords.longitude.toPrecision(16)}</Text>
-      </View>
+      </SafeAreaView>
     )  
   }
 }
@@ -109,26 +126,35 @@ export class RegisterScreen extends Component {
   constructor() {
     super()
     this.state = {
+      username: "",
       email: "",
     }
   }
 
   render() {
     return (
-			<View style={styles.container}>
-				<TextInput style={styles.text}
-					placeholder='Name here'
-				/>
-			</View>
+			<SafeAreaView style={styles.container}>
+        <View style={styles.formContainer}>
+          <Text style={styles.h1Text}>Username:</Text>
+          <TextInput style={styles.textInput}
+            placeholder='Tap here to enter your Username'
+          />
+
+          <Text style={styles.h1Text}>{"\n"}Email:</Text>
+          <TextInput style={styles.textInput}
+            placeholder='Tap here to enter your Email'
+          />
+        </View>
+      </SafeAreaView>
 	  );
   }
 }
 
 function SocialScreen() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.text}>This is the Social screen</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
