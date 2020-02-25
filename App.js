@@ -1,5 +1,8 @@
-import * as React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Button, StyleSheet, Text, View, TextInput } from 'react-native';
+
+// Import elements
+//import { Input } from 'react-native-elements';
 
 // Navbar and headers
 import { NavigationContainer } from '@react-navigation/native';
@@ -29,6 +32,19 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%'
+  },
+  mapInfoText: {
+    backgroundColor: "rgba(0,0,0,0.4)",
+    textShadowColor: "#000",
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 16,
+    color: '#fff',
+    zIndex: 9999,
+    position: "absolute",
+    top: 42.5,
+    left: 0,
+    right: 0,
+    padding: 16
   }
 });
 
@@ -37,6 +53,7 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.text}>This is the Home screen</Text>
       <Button title="Go to Create" onPress={() => navigation.navigate('Create')}></Button>
+	  <Button title="Go to Register" onPress={() => navigation.navigate('Register')}></Button>
     </View>
   );
 }
@@ -49,21 +66,62 @@ function CreateScreen() {
   );
 }
 
-function MapScreen() {
-  return (
-    <View style={styles.container}>
-      
-      <MapView
-        region={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        style={styles.map}
-      />
-    </View>
-  )
+// With thanks to https://stackoverflow.com/questions/41139643/react-native-how-to-change-text-value-dynamically for teaching me React Native state management
+export class MapScreen extends Component {
+  constructor() {
+    super()
+    this.state = {
+      mapCoords: {
+        latitude: 51.888106,
+        longitude: -2.088446,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      }
+    }
+  }
+
+  // The mapStyle JSON is first made here: https://mapstyle.withgoogle.com/ then minified before being pasted into the code here
+  //mapStyle = [{"elementType":"geometry","stylers":[{"color":"#ebe3cd"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#523735"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f1e6"}]},{"featureType":"administrative","elementType":"geometry.stroke","stylers":[{"color":"#c9b2a6"}]},{"featureType":"administrative.land_parcel","elementType":"geometry.stroke","stylers":[{"color":"#dcd2be"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#ae9e90"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#dfd2ae"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#dfd2ae"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#93817c"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#a5b076"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#447530"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#f5f1e6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#fdfcf8"}]},{"featureType":"road.arterial","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#f8c967"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#e9bc62"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry","stylers":[{"color":"#e98d58"}]},{"featureType":"road.highway.controlled_access","elementType":"geometry.stroke","stylers":[{"color":"#db8555"}]},{"featureType":"road.local","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#806b63"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#dfd2ae"}]},{"featureType":"transit.line","elementType":"labels.text.fill","stylers":[{"color":"#8f7d77"}]},{"featureType":"transit.line","elementType":"labels.text.stroke","stylers":[{"color":"#ebe3cd"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#dfd2ae"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#b9d3c2"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#92998d"}]}];
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <MapView
+          initialRegion={{
+            latitude: 51.888106,
+            longitude: -2.088446,
+            
+            // The deltas are used for the zoom level.
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          }}
+          style={styles.map}
+          onRegionChangeComplete={(newCoords) => this.setState({mapCoords: newCoords})}
+          //customMapStyle={this.customMapStyle}
+        />
+        <Text style={styles.mapInfoText}>Coords: {this.state.mapCoords.latitude.toPrecision(16)}, {this.state.mapCoords.longitude.toPrecision(16)}</Text>
+      </View>
+    )  
+  }
+}
+
+export class RegisterScreen extends Component {
+  constructor() {
+    super()
+    this.state = {
+      email: "",
+    }
+  }
+
+  render() {
+    return (
+			<View style={styles.container}>
+				<TextInput style={styles.text}
+					placeholder='Name here'
+				/>
+			</View>
+	  );
+  }
 }
 
 function SocialScreen() {
@@ -74,38 +132,54 @@ function SocialScreen() {
   );
 }
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator
-      // Colours
-        tabBarOptions={{
-            activeTintColor: '#000', inactiveTintColor: '#777', activeBackgroundColor: '#caf7e2', inactiveBackgroundColor: '#caf7e2'
-        }}
+export default class App extends Component {
+  constructor() {
+    super()
+    this.state = {
+      mapCoords: {
+        latitude: 51.888106,
+        longitude: -2.088446,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      }
+    }
+  }
+  render() {
+    return (
+      <NavigationContainer>
+        <Tab.Navigator
+        // Colours
+          tabBarOptions={{
+              activeTintColor: '#000', inactiveTintColor: '#777', activeBackgroundColor: '#caf7e2', inactiveBackgroundColor: '#caf7e2'
+          }}
 
-      // Icons
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+        // Icons
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
 
-            if (route.name === "Home") {
-              iconName = focused ? 'map' : 'map-o';
-            } else if (route.name === "Map") {
-              iconName = focused ? 'map' : 'map-o';
-            } else if (route.name === "Create") {
-              iconName = focused ? 'plus-square' : 'plus-square-o';
-            } else if (route.name === "Social") {
-              iconName = focused ? 'user' : 'user-o';
+              if (route.name === "Home") {
+                iconName = focused ? 'home' : 'home';
+              } else if (route.name === "Map") {
+                iconName = focused ? 'map' : 'map-o';
+              } else if (route.name === "Create") {
+                iconName = focused ? 'plus-square' : 'plus-square-o';
+              } else if (route.name === "Social") {
+                iconName = focused ? 'user' : 'user-o';
+              } else if (route.name === "Register") {
+                iconName = focused ? 'pencil-square' : 'pencil-square-o';
+              }
+
+              return <FontAwesome name={iconName} color={color} size={size} />
             }
-
-            return <FontAwesome name={iconName} color={color} size={size} />
-          }
-        })}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Map" component={MapScreen} />
-        <Tab.Screen name="Create" component={CreateScreen} />
-        <Tab.Screen name="Social" component={SocialScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+          })}>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Create" component={CreateScreen} />
+          <Tab.Screen name="Map" component={MapScreen} />
+          <Tab.Screen name="Social" component={SocialScreen} />
+				  <Tab.Screen name="Register" component={RegisterScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
