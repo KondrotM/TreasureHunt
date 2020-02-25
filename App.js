@@ -16,6 +16,11 @@ import { FontAwesome } from '@expo/vector-icons';
 // Map
 import MapView from 'react-native-maps';
 
+// Improve performance and reduce memory usage by enabling native screen optimisations
+// https://reactnavigation.org/docs/en/react-native-screens.html
+import { enableScreens } from 'react-native-screens';
+enableScreens();
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
