@@ -1,11 +1,11 @@
 <?php
 	ob_start(); // Show at least partial errors even if there was an error attempting to show an error
 
-	$dbUsername = "database-username-here";
-	$dbPassword = "database-pass-here";
+	$dbUsername = "group";
+	$dbPassword = "1sp!0mD3";
 	$dbServer = "localhost";
-	$dbPort = "database-port-number-here";
-	$dbDatabase = "database-name-here";
+	$dbPort = "3306";
+	$dbDatabase = "thenathanists_treasurehunt";
 
 	// Connect to the database
 	$db = new PDO("mysql:host=" . $dbServer . ";port=" . $dbPort . ";dbname=" . $dbDatabase, $dbUsername, $dbPassword);
