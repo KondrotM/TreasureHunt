@@ -2,7 +2,7 @@
 	ob_start(); // Show at least partial errors even if there was an error attempting to show an error
 
 	$dbUsername = "group";
-	$dbPassword = "1sp!0mD3";
+	$dbPassword = "0?4L5yyj";
 	$dbServer = "localhost";
 	$dbPort = "3306";
 	$dbDatabase = "thenathanists_treasurehunt";
