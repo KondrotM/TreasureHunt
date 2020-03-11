@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View, ScrollView, TextInput } from 'react-native';
+import { Button, StyleSheet, Text, View, ScrollView, TextInput, Picker } from 'react-native';
 
 // Support for notches and display cutouts
 // https://reactnavigation.org/docs/en/handling-safe-area.html
@@ -39,6 +39,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     alignSelf: 'flex-start',
   },
+	h2Text: {
+		fontSize: 18,
+		color: '#fff',
+		alignSelf: 'flex-start',
+	},
+	titleText: {
+		fontSize: 24,
+		color: '#fff',
+		alignSelf: 'center',
+		marginBottom: 24
+	},
   text: {
     color: '#fff'
   },
@@ -74,6 +85,16 @@ const styles = StyleSheet.create({
   }
 });
 
+const pickerStyle = {
+	picker: {
+		color: '#fff',
+		borderStyle: 'solid',
+		alignSelf: 'flex-start',
+		minWidth: '75%',
+		maxWidth: '90%'
+	}
+};
+
 function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
@@ -87,12 +108,69 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function CreateScreen() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>This is the Create screen</Text>
-    </SafeAreaView>
-  );
+//function CreateScreen({ navigation }) {
+//  return (
+//    <SafeAreaView style={styles.container}>
+//      <Text style={styles.text}>This is the Create screen</Text>
+//			<Button title="Create Map" onPress={() => navigation.navigate('Create')}></Button>
+//			
+//
+//    </SafeAreaView>
+//  );
+//}
+
+export class CreateScreen extends Component {
+	constructor() {
+		super()
+		this.state = {
+			userID: 1,
+			locationID: null,
+			difficulty: 'beginner',
+			description: '',
+			mapName: ''
+		}
+	}
+	
+	render() {
+    return (
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.formContainer}>
+					<Text style={styles.titleText}>Create New Map</Text>
+          <Text style={styles.h2Text}>Map Name:</Text>
+          <TextInput style={styles.textInput}
+            placeholder='Tap here to enter the map name'
+						value={this.state.mapName}
+						onChangeText={mapName => this.setState({mapName})}
+          />
+
+          <Text style={styles.h2Text}>Map Description:</Text>
+          <TextInput style={styles.textInput}
+            placeholder='Tap here to enter description'
+						// might need this for referencing the description later
+//						ref = {(el) => { this.description = el; }}
+						value={this.state.description}
+						onChangeText={description => this.setState({description})}
+          />
+					
+					<Text style={styles.h2Text}>Difficulty:</Text>
+					<Picker
+						selectedValue={this.state.difficulty}
+						style={pickerStyle.picker}
+						onValueChange={(itemValue, itemIndex) =>
+							this.setState({difficulty: itemValue})
+						}>
+						<Picker.Item label="Beginner" value="beginner" />
+						<Picker.Item label="Intermediate" value="intermediate" />
+						<Picker.Item label="Difficult" value="difficult" />
+					</Picker>
+					
+					<Button title='Submit Map' onPress={() => fetch(
+							"https://thenathanists.uogs.co.uk/api.php?fn=createMap&mapName=" + this.state.mapName + "&description=" + this.state.mapDesc + "&difficulty=" + this.state.difficulty						
+						).then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
+        </View>
+      </ScrollView>
+	  );
+  }
 }
 
 // With thanks to https://stackoverflow.com/questions/41139643/react-native-how-to-change-text-value-dynamically for teaching me React Native state management
