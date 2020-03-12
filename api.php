@@ -7,11 +7,19 @@
 
 	if (isset($_GET['fn'])) { // GET method
 		$fnToRun = $_GET['fn'];
+		$invalidFn = true;
 		if ($fnToRun === 'username') {
+			$invalidFn = false;
 			echo json_encode(["Type" => "Success", "Msg" => "Example username"]);
-		} else {
-			echo json_encode(["Type" => "Error", "Msg" => "Empty '?fn='"]);
+		} 
+		if ($fnToRun === 'createMap') {
+			$invalidFn = false;
+			echo json_encode(["Type" => "Success", "Msg" => "Map Created"]);
 		}
+		if ($invalidFn) {
+			echo json_encode(["Type" => "Error", "Msg" => "Invalid '?fn='"]);
+		}
+		
 	} else if (isset($_POST['fn'])) { // POST method
 		if ($fnToRun === "login") {
 			// First check if a username and password have been provided

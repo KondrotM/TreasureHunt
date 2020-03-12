@@ -166,7 +166,7 @@ export class CreateScreen extends Component {
 					
 					<Button title='Submit Map' onPress={() => fetch(
 							"https://thenathanists.uogs.co.uk/api.php?fn=createMap&mapName=" + this.state.mapName + "&description=" + this.state.mapDesc + "&difficulty=" + this.state.difficulty						
-						).then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
+						).then((response) => response.json()).then((responseJson) => {alert(responseJson.Msg)})}></Button>
         </View>
       </ScrollView>
 	  );
