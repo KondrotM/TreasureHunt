@@ -128,6 +128,8 @@ export class CreateScreen extends Component {
 		this.state = {
 			fn: 'createMap',
 			userID: 1,
+			mapX: null,
+			mapy: null,
 			locationID: null,
 			difficulty: 'beginner',
 			description: '',
@@ -179,7 +181,7 @@ export class CreateScreen extends Component {
 							headers: {
 								'Content-Type': 'application/x-www-form-urlencoded'
 							},
-							body: 'fn='+this.state.fn+'&mapName='+this.state.mapName
+							body: 'fn=createMap&body='+JSON.stringify(this.state)
 						}).then((response) => response.json()).then((responseJson) => {alert(JSON.stringify(responseJson))})}></Button>
         </View>
       </ScrollView>

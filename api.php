@@ -22,6 +22,7 @@
 			echo json_encode(["Type" => "Error", "Msg" => "Invalid '?fn='"]);
 		}
 		
+	
 	} else if (isset($_POST['fn'])) { // POST method
 		$fnToRun = $_POST['fn'];
 		if ($fnToRun === "login") {
@@ -78,9 +79,11 @@
 			echo json_encode(["Type" => "Success", "Msg" => "Logged out."]);
 			exit;
 		} else if ($fnToRun === "createMap") {
-			$mapName = $_POST['mapName'];
+			$body = json_decode($_POST['body']);
+//			echo $body.mapName;
+			
 //			$mapDesc = $_POST['mapDesc'];
-			echo json_encode(["Type" => "Success", "Msg" => $mapName]);
+			echo json_encode(["Type" => "Success", "Msg" => $body -> mapName]);
 			exit;
 		} else {
 			echo json_encode(["Type" => "Error", "Msg" => "Empty fn in POST request."]);
@@ -89,4 +92,5 @@
 	} else {
 		echo json_encode("So tell me what you want, what you really really want. ('?fn=' missing)");
 	}
+
 ?>
