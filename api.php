@@ -6,6 +6,8 @@
 	include_once('session.php');
 
 	if (isset($_GET['fn'])) { // GET method
+		echo json_encode(["Type" => "Success", "Msg" => "Get function found"]);
+		exit;
 		$fnToRun = $_GET['fn'];
 		$invalidFn = true;
 		if ($fnToRun === 'username') {
@@ -21,6 +23,7 @@
 		}
 		
 	} else if (isset($_POST['fn'])) { // POST method
+		$fnToRun = $_POST['fn'];
 		if ($fnToRun === "login") {
 			// First check if a username and password have been provided
 			if (empty($_POST['username']) | empty($_POST['password'])) {
@@ -29,6 +32,9 @@
 			} else {
 				// Both the username and password have been provided, so carry on...
 
+				echo json_encode(["Type" => "Error", "Msg" => "Username and/or Password are provided."]);
+				exit;
+				
 				$username = $_POST['username'];
 				// Hash the password before checking it against the database
 				$password = sha1($_POST['password']);
@@ -60,7 +66,8 @@
 					exit;
 				}
 			}
-		} else if ($fnToRun === "signup") {
+		}
+		else if ($fnToRun === "signup") {
 			// todo: signup functionality
 			echo json_encode(["Type" => "Error", "Msg" => "Currently unimplemented."]);
 		} else if ($fnToRun === "logout") {
@@ -69,6 +76,11 @@
 
 			// and return a success response
 			echo json_encode(["Type" => "Success", "Msg" => "Logged out."]);
+			exit;
+		} else if ($fnToRun === "createMap") {
+			$mapName = $_POST['mapName'];
+//			$mapDesc = $_POST['mapDesc'];
+			echo json_encode(["Type" => "Success", "Msg" => $mapName]);
 			exit;
 		} else {
 			echo json_encode(["Type" => "Error", "Msg" => "Empty fn in POST request."]);

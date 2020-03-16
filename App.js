@@ -101,8 +101,11 @@ function HomeScreen({ navigation }) {
       <Text style={styles.text}>This is the Home screen</Text>
       <Button title="Go to Create" onPress={() => navigation.navigate('Create')}></Button>
 	    <Button title="Go to Register" onPress={() => navigation.navigate('Register')}></Button>
+			
       <Button title="Run fetch test" onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php?fn=username").then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
+			
       <Button title="Run fetch test 2" onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php?fn=InvalidFunctionName-jioewtjiogdsoifdsijofdsioj").then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
+			
       <Button title="Run fetch test 3" onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php").then((response) => response.json()).then((responseJson) => {alert(responseJson)})}></Button>
     </SafeAreaView>
   );
@@ -123,11 +126,14 @@ export class CreateScreen extends Component {
 	constructor() {
 		super()
 		this.state = {
+			fn: 'createMap',
 			userID: 1,
 			locationID: null,
 			difficulty: 'beginner',
 			description: '',
-			mapName: ''
+			mapName: '',
+			username: 'user',
+			password: 'pass'
 		}
 	}
 	
@@ -167,6 +173,14 @@ export class CreateScreen extends Component {
 					<Button title='Submit Map' onPress={() => fetch(
 							"https://thenathanists.uogs.co.uk/api.php?fn=createMap&mapName=" + this.state.mapName + "&description=" + this.state.mapDesc + "&difficulty=" + this.state.difficulty						
 						).then((response) => response.json()).then((responseJson) => {alert(responseJson.Msg)})}></Button>
+					
+					<Button title='Submit via POST' onPress={() => fetch("https://thenathanists.uogs.co.uk/api.php", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							},
+							body: 'fn='+this.state.fn+'&mapName='+this.state.mapName
+						}).then((response) => response.json()).then((responseJson) => {alert(JSON.stringify(responseJson))})}></Button>
         </View>
       </ScrollView>
 	  );
