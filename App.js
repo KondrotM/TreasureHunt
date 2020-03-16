@@ -14,9 +14,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome } from '@expo/vector-icons';
 
 // Map
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
-// Improve performance and reduce memory usage by enabling native screen optimisations
+// Improve performance and reduce memory usage (especially on low-end devices) by enabling native screen optimisations
 // https://reactnavigation.org/docs/en/react-native-screens.html
 import { enableScreens } from 'react-native-screens';
 enableScreens();
@@ -173,17 +173,22 @@ export class CreateScreen extends Component {
   }
 }
 
-// With thanks to https://stackoverflow.com/questions/41139643/react-native-how-to-change-text-value-dynamically for teaching me React Native state management
+// https://github.com/react-native-community/react-native-maps/blob/master/example/examples/DefaultMarkers.js
+let id = 0;
 export class MapScreen extends Component {
   constructor() {
     super()
+    // With thanks to https://stackoverflow.com/questions/41139643/react-native-how-to-change-text-value-dynamically for teaching me React Native state management
     this.state = {
       mapCoords: {
         latitude: 51.888106,
         longitude: -2.088446,
         latitudeDelta: 0.05,
         longitudeDelta: 0.05,
-      }
+      },
+      markers: [
+        { coordinate: {latitude: 51.888106, longitude: -2.088446}, key: id++}
+      ]
     }
   }
 
@@ -204,8 +209,17 @@ export class MapScreen extends Component {
           }}
           style={styles.map}
           onRegionChangeComplete={(newCoords) => this.setState({mapCoords: newCoords})}
-          customMapStyle={this.customMapStyle}
-        />
+          customMapStyle={this.customMapStyle}>
+            {this.state.markers.map(marker => (
+              <MapView.Marker
+                key={marker.key}
+                coordinate={marker.coordinate}
+              />
+            ))}
+          <MapView.Marker
+            coordinate={{latitude: 51.888106, longitude: -2.088446}}
+            draggable/>
+        </MapView>
         <Text style={styles.mapInfoText}>Coords: {this.state.mapCoords.latitude.toPrecision(16)}, {this.state.mapCoords.longitude.toPrecision(16)}</Text>
       </SafeAreaView>
     )  
