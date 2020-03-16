@@ -58,6 +58,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
+  inlineMap: {
+    width: '200px',
+    height: '200px'
+  },
   mapInfoText: {
     backgroundColor: "rgba(0,0,0,0.4)",
     textShadowColor: "#000",
@@ -129,7 +133,8 @@ export class CreateScreen extends Component {
 			fn: 'createMap',
 			userID: 1,
 			mapX: null,
-			mapy: null,
+      mapy: null,
+      mapCoords: null,
 			locationID: null,
 			difficulty: 'beginner',
 			description: '',
@@ -171,6 +176,13 @@ export class CreateScreen extends Component {
 						<Picker.Item label="Intermediate" value="intermediate" />
 						<Picker.Item label="Difficult" value="difficult" />
 					</Picker>
+
+          <Text style={styles.h2Text}>Coordinates:</Text>
+          <TextInput style={styles.textInput}
+            placeholder='lat, long'
+            value={this.state.mapCoords}
+            onChangeText={description => this.setState({mapCoords})}
+          />
 					
 					<Button title='Submit Map' onPress={() => fetch(
 							"https://thenathanists.uogs.co.uk/api.php?fn=createMap&mapName=" + this.state.mapName + "&description=" + this.state.mapDesc + "&difficulty=" + this.state.difficulty						
