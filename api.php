@@ -78,8 +78,24 @@
 			// and return a success response
 			echo json_encode(["Type" => "Success", "Msg" => "Logged out."]);
 			exit;
-		} else if ($fnToRun === "createMap") {
+		} else if ($fnToRun === "createQuest") {
 			$body = json_decode($_POST['body']);
+			$mapname = $body -> mapName;
+//			createQuest('1',$body -> mapName, $body -> mapDesc, $body -> difficulty, '55.00','45.00');
+//			
+			try {
+				$query = $db -> prepare("INSERT INTO tablelocations (`userID`,`posX`,`posY`) VALUES (':userID',':mapX',':mapY');");
+				$query -> execute([':userID' => $userID, ':mapX' => $mapX, ':mapY' => $mapY]);
+			} catch (PDOException $e) {
+				echo $e;
+				exit;
+			}
+
+			$dbRow = $dbQuery -> fetch();
+			if ($dbRow) {
+				echo json_encode("I can get locationID easy");
+			}
+			
 //			echo $body.mapName;
 			
 //			$mapDesc = $_POST['mapDesc'];
@@ -92,5 +108,23 @@
 	} else {
 		echo json_encode("So tell me what you want, what you really really want. ('?fn=' missing)");
 	}
+//
+//function createQuest($userID, $mapName, $mapDesc, $mapDiff, $mapX, $mapY){
+//	include("config.php");
+//	echo 'This is db ->' + $db;
+//	try {
+//		$query = $db -> prepare('INSERT INTO tablelocations (`userID`,`posX`,`posY`) VALUES (':userID',':mapX',':mapY');');
+//		$query -> execute([':userID' => $userID, ':mapX' => $mapX, ':mapY' => $mapY]);
+//	} catch (PDOException $e) {
+//		echo $e;
+//		exit;
+//	}
+//	
+//	$dbRow = $dbQuery -> fetch();
+//	if ($dbRow) {
+//		echo json_encode("I can get locationID easy");
+//	}
+//	
+//}
 
 ?>
