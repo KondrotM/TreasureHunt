@@ -22,8 +22,10 @@ function CreateScreen({ navigation }) {
 	const [mapName, setMapName] = useState('createMap');
 
 	return (
-
-		<Button title="Navigation to Mapation" onPress={() => navigation.navigate('Map')} />
+		<View style={styles.container}>
+			<Button title="Navigation to Mapation" onPress={() => navigation.navigate('Map',{"valueName":""})} />
+			<Button title="Navigate and pass value to map" onPress={() => navigation.navigate('Map',{"valueName":"valueContents"})} />
+		</View>
 		);
 }
 
