@@ -1,6 +1,6 @@
 import styles from './styles';
 import React, { Component, useState } from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, TextInput, View } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 // import { Icon } from 'react-native-elements';
 
@@ -9,8 +9,20 @@ import { NavigationScreenProps } from 'react-navigation';
 function LoginScreen({ navigation }) {
 	return ( 
       <View style={styles.container}>
-        <Text>This is the LoginScreen.</Text>
-        <Button title="Login" onPress={() => navigation.navigate('LoggedIn')}> </Button>
+      	<View style={styles.formContainer}>
+      		<Text style={styles.heading}>Username:</Text>
+      		<TextInput style={styles.textInput}
+              placeholder='Tap here to enter your Username'
+            />
+            <Text style={styles.heading}>Password:</Text>
+            <TextInput style={styles.textInput}
+              placeholder = '********'
+              textContentType = 'password'
+              secureTextEntry = {true}
+            />
+	        <Text>This is the LoginScreen.</Text>
+    	    <Button title="Login" onPress={() => navigation.navigate('LoggedIn')}> </Button>
+	      </View>
       </View>
       );
 }

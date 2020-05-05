@@ -53,22 +53,30 @@ import {createSwitchNavigator} from 'react-navigation';
 // export default MainTabs;
 const MainTabs = createBottomTabNavigator();
 
-export default class BottomTabNagivator extends React.Component {
-	constructor(){
-		super()
-		this.state = {
-			isLoggedIn : true
-		}
-	}
-	render(){
+export default function BottomTabNavigator({ navigation }){
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
+// export default class BottomTabNagivator extends React.Component {
+// 	constructor(){
+// 		super()
+// 		this.state = {
+// 			isLoggedIn : true
+// 		}
+// 	}
+// 	render(){
 
-	if (this.state.isLoading) {
+	if (isLoading) {
 		return <LoadingScreen />;
 	}
 
 		return (
-			<MainTabs.Navigator initlaRouteName = {'Login'}>
-			{this.state.isLoggedIn ? (
+			<MainTabs.Navigator initlaRouteName = {'Login'}             tabBarOptions={{
+                activeTintColor: '#000', 
+                inactiveTintColor: '#777', 
+                activeBackgroundColor: '#caf7e2', 
+                inactiveBackgroundColor: '#caf7e2'
+            }}>
+			{isLoggedIn ? (
 				<>
 				<MainTabs.Screen
 				name = "Play"
@@ -104,7 +112,6 @@ export default class BottomTabNagivator extends React.Component {
 
 
 	}
-}
 // export default function BottomTabNagivator () {
 // 	const [isLoggedIn, logIn] = loginUser();
 

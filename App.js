@@ -14,8 +14,23 @@ function MyStack() {
     // The BottomTabNavigator holds references to the play/create/social screens
     // Any other screens can be added to this stack screen, but they won't be shown on the navigator
     <Stack.Navigator>
-      <Stack.Screen name='Explore More' component={Navigator} />
-      <Stack.Screen name='Map' component = {MapScreen} />
+      <Stack.Screen 
+      name='Explore More' 
+      component={Navigator}
+      options={{
+        headerStyle: {
+          backgroundColor: '#caf7e2'
+        }
+      }}/>
+      <Stack.Screen 
+      name='Map' 
+      component = {MapScreen} 
+      options={{
+        headerStyle: {
+          backgroundColor: '#caf7e2'
+        }
+      }}
+      />
     </Stack.Navigator>
   );
 }

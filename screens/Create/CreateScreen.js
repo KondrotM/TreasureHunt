@@ -4,59 +4,71 @@ import { Button, StyleSheet, Text, View, ScrollView, TextInput, Picker } from 'r
 import { StackNavigator } from 'react-navigation';
 
 const pickerStyle = {
-	picker: {
-		color: '#fff',
-		borderStyle: 'solid',
-		alignSelf: 'flex-start',
-		minWidth: '75%',
-		maxWidth: '90%'
-	}
+
 };
 
 function CreateScreen({ navigation }) {
 	const [fn, setFn] = useState('createMap');
-	const [mapX, setMapX] = useState('createMap');
-	const [mapY, setSetMapY] = useState('createMap');
-	const [difficulty, setDifficulty] = useState('createMap');
-	const [description, setDescription] = useState('createMap');
-	const [mapName, setMapName] = useState('createMap');
+	const [mapX, setMapX] = useState('0.00');
+	const [mapY, setSetMapY] = useState('0.00');
+	const [difficulty, setDifficulty] = useState('');
+	const [description, setDescription] = useState('');
+	const [mapName, setMapName] = useState('');
 
 	return (
+		<ScrollView contentContainerStyle={styles.container}>
+			<View style={styles.formContainer}>
 
-		<Button title="Navigation to Mapation" onPress={() => navigation.navigate('Map')} />
-		);
+
+			<Text style={styles.titleText}> Create New Map </Text>
+
+			<Text style={styles.heading}>Map Name:</Text>
+			<TextInput style={styles.textInput}
+				placeholder='Tap here to enter the map name'
+				value={mapName}
+				onChangeText={val => setMapName(val)}
+			/>
+
+			<Text style={styles.heading}>Map Description</Text>
+			<TextInput style={styles.textInput}
+				multiline
+				numberOfLines = {4}
+				maxLength = {256}
+				placeholder='Map Desc Here'
+				value={description}
+				onChangeText={val => setDescription(val)}
+			/>
+
+			<Text style={styles.heading}>Difficulty:</Text>
+			<Picker
+				selectedValue={difficulty}
+				style={styles.picker}
+				onValueChange={(itemValue, itemIndex) =>
+					setDifficulty(itemValue)
+				}>
+				<Picker.Item label="Beginner" value="beginner" />
+				<Picker.Item label="Intermediate" value="intermediate" />
+				<Picker.Item label="Difficult" value="difficult" />
+			</Picker>
+
+			<Text style={styles.heading}>Initial Co-ordinates:</Text>
+			<Button title="Select Co-ordinates" onPress={() => navigation.navigate('Map')} />
+			<Text style={styles.smallText}>X {mapX} Y {mapY}</Text>
+
+
+			<Button title="Create Map" onPress={() => fetch(
+					"https://thenathanists.uogs.co.uk/api.php?fn=createMap&mapName=" + mapName + "&description=" + description + "&difficulty=" + difficulty).then((response) => response.json()).then((responseJson) => {alert(responseJson.Msg)})}>
+				</Button>
+
+			</View>
+		</ScrollView>
+	);
 }
 
-// class CreateScreen extends Component {
-// 	constructor(props) {
-// 		super(props)
-// 		this.state = {
-// 			fn: 'createMap',
-// 			userID: 1,
-// 			mapX: null,
-// 			mapy: null,
-// 			mapCoords: null,
-// 			locationID: null,
-// 			difficulty: 'beginner',
-// 			description: '',
-// 			mapName: '',
-// 			username: 'user',
-// 			password: 'pass'
-// 		}
-// 	}
-	
 // 	render() {
 // 	const { navigation } = this.props.navigation;
 // 	return (
 // 		<ScrollView contentContainerStyle={styles.container}>
-// 			<View style={styles.formContainer}>
-// 				<Text style={styles.titleText}>Create New Map</Text>
-// 				<Text style={styles.h2Text}>Map Name:</Text>
-// 				<TextInput style={styles.textInput}
-// 					placeholder='Tap here to enter the map name'
-// 					value={this.state.mapName}
-// 					onChangeText={mapName => this.setState({mapName})}
-// 				/>
 
 // 				<Text style={styles.h2Text}>Map Description:</Text>
 // 				<TextInput style={styles.textInput}
