@@ -52,11 +52,11 @@ function CreateScreen({ navigation }) {
 			</Picker>
 
 			<Text style={styles.heading}>Initial Co-ordinates:</Text>
-			<Button title="Select Co-ordinates" onPress={() => navigation.navigate('Map')} />
+			<Button color='#56B09C' title="Select Co-ordinates" onPress={() => navigation.navigate('Map')} />
 			<Text style={styles.smallText}>X {mapX} Y {mapY}</Text>
 
 
-			<Button title="Create Map" onPress={() => fetch(
+			<Button title="Create Map" color='#56B09C' onPress={() => fetch(
 					"https://thenathanists.uogs.co.uk/api.php?fn=createMap&mapName=" + mapName + "&description=" + description + "&difficulty=" + difficulty).then((response) => response.json()).then((responseJson) => {alert(responseJson.Msg)})}>
 				</Button>
 

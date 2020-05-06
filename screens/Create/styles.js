@@ -7,17 +7,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#000',
   },
+  button: {
+    color: '#56B09C'
+  },
   formContainer: {
     alignSelf: 'center'
   },
   heading: {
     fontSize: 24,
-    color: '#fff',
+    color: '#56B09C',
     alignSelf: 'flex-start'
   },
 	titleText: {
 		fontSize: 24,
-		color: '#fff',
+		color: '#CAF7E2',
 		alignSelf: 'center',
 		marginBottom: 24
 	},
@@ -25,7 +28,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: '#56B09C',
     padding: 8,
     marginTop: 8,
     marginBottom: 8,
