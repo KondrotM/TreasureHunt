@@ -1,6 +1,6 @@
 import styles from './styles';
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, Button, View } from 'react-native';
 import { useRoute } from '@react-navigation/native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
@@ -18,6 +18,7 @@ function QuestDetailsScreen(){
 			}
 		})()}
         <FontAwesomeIcon size = {150} icon={ faMap } />
+        <Button title='Play Quest' onPress= {() => alert('Not yet implemented obv')} />
       </View>
     );
   }
