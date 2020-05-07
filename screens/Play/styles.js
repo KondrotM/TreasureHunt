@@ -24,8 +24,13 @@ const styles = StyleSheet.create({
 		marginBottom: 24
 	},
   scrollView: {
-    backgroundColor: '#56B09C',
+    backgroundColor: '#CAF7E2',
     marginHorizontal: 20
+  },
+  questText: {
+  	color: '#CAF7E2',
+  	fontSize: 20,
+  	marginLeft: -15,
   },
   textInput: {
     color: '#fff',
@@ -49,7 +54,10 @@ const styles = StyleSheet.create({
   },
   questBox: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "#58B09C",
+    borderColor: '#CAF7E2',
+    borderWidth: 0.5,
+    borderRadius: 4,
     padding: 10
   },
   box: {

@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Navigator from './navigation/Navigator';
 import MapScreen from './screens/Map';
+import QuestDetailsScreen from './screens/QuestDetails';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,15 @@ function MyStack() {
       <Stack.Screen 
       name='Map' 
       component = {MapScreen} 
+      options={{
+        headerStyle: {
+          backgroundColor: '#caf7e2'
+        }
+      }}
+      />
+      <Stack.Screen
+      name='Quest Details'
+      component={QuestDetailsScreen}
       options={{
         headerStyle: {
           backgroundColor: '#caf7e2'

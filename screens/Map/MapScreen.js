@@ -20,7 +20,7 @@ function MapScreen(){
         { coordinate: {latitude: 51.888106, longitude: -2.088446}, key: id++}
       ])
 	return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <MapView
           initialRegion={{
             latitude: 51.888106,
@@ -44,7 +44,7 @@ function MapScreen(){
             draggable/>
         </MapView>
         <Text style={styles.mapInfoText}>Coords: {mapCoords.latitude.toPrecision(16)}, {mapCoords.longitude.toPrecision(16)}</Text>
-      </SafeAreaView>
+      </View>
 
 
 	);
