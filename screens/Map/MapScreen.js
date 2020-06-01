@@ -17,7 +17,7 @@ function MapScreen(){
         longitudeDelta: 0.05,
       });
 	const [markers, setMarkers] = useState([
-        { coordinate: {latitude: 51.888106, longitude: -2.088446}, key: id++}
+        { coordinate: {latitude: 51.888106, longitude: -2.088446}, key: 0}
       ])
 	return (
       <View style={styles.container}>
@@ -33,12 +33,12 @@ function MapScreen(){
           style={styles.map}
           onRegionChangeComplete={(newCoords) => setMapCoords(newCoords)}
           customMapStyle={customMapStyle}>
-            {markers.map(marker => (
+            {/*{markers.map(marker => (
               <MapView.Marker
                 key={marker.key}
                 coordinate={marker.coordinate}
               />
-            ))}
+            ))}*/}
           <MapView.Marker
             coordinate={{latitude: 51.888106, longitude: -2.088446}}
             draggable/>

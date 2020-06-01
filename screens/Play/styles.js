@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
 		marginBottom: 24
 	},
   scrollView: {
-    backgroundColor: '#CAF7E2',
-    marginHorizontal: 20
+    backgroundColor: '#CAF7E2'
+    // marginHorizontal: 20
   },
   questText: {
   	color: '#CAF7E2',

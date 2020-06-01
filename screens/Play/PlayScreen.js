@@ -47,9 +47,10 @@ function QuestBox({navigation, title, diff, id}) {
 function PlayScreen({ navigation }){
 	return (
 		<View style={styles.container}>
+			<View style = {styles.formContainer}>
 			<Text style={styles.titleText}> Quest Selection </Text>
 			<Text style={styles.smallText}> Showing Quests in Cheltenham </Text>
-			<View style={{height: 300, width: '100%', marginBottom: 20}}>
+			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
 				<QuestBox diff='Easy' title='Getting Around' id='0' navigation = {navigation} />
 				<QuestBox diff='Medium' title='Chelt Locals Only' id='1' navigation = {navigation}/>
@@ -62,6 +63,7 @@ function PlayScreen({ navigation }){
 			</ScrollView>
 			</View>
 			<Button title='History' color='#56B09C' onPress={() => alert('Not Yet Implemented')} />
+			</View>
 		</View>
 	);
 }
