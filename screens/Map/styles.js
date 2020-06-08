@@ -51,6 +51,13 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 16
   },
+  mapButton: {
+    position: "absolute",
+    bottom: 0,
+    left:0,
+    right:0,
+    padding: 16
+  },
   textInput: {
     color: '#fff',
     borderStyle: 'solid',
