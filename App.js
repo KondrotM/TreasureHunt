@@ -14,7 +14,7 @@ function MyStack() {
   return (
     // There is a BottomTabNavigator within the Stack Navigator
     // The BottomTabNavigator holds references to the play/create/social screens
-    // Any other screens can be added to this stack screen, but they won't be shown on the navigator
+    // Any other screens can be added to this stack screen and can be navigated to, but they won't be shown on the navigator, mk
     <Stack.Navigator>
       <Stack.Screen 
       name='Explore More' 

@@ -1,5 +1,5 @@
 import styles from './styles';
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState} from 'react';
 import { Text, Button, TouchableHighlight, View, SafeAreaView, ScrollView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
@@ -8,13 +8,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { MapScreen } from '../Map';
 import { StackNavigator } from 'react-navigation';
-
-// box view sourced from https://link.medium.com/roPmxlS8g6
-const BoxSimple = ({ children }) => (
-	<View style={styles.box}>
-		{children}
-	</View>
-)
 
 
 
@@ -44,7 +37,34 @@ function QuestBox({navigation, title, diff, id}) {
 	);
 }
 
-function PlayScreen({ navigation }){
+function PlayScreen({ navigation, questsToShow }){
+
+	// State hook which holds quest information, mk
+	const [questsList, setQuestsList] = useState([
+		]);
+
+
+	// asynchronous function which updates questsList on response, mk
+	function getQuests(){
+		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: 'fn=getQuests'
+		}).then(
+		(response) => response.json()
+		).then(
+		(json) => setQuestsList(json.maps)
+		);
+	};
+
+	// useEffect is called when the screen loads, as it has no triggers, [], it is only called once
+	useEffect(() => {
+		getQuests();
+	},[]);
+
+
 	return (
 		<View style={styles.container}>
 			<View style = {styles.formContainer}>
@@ -52,17 +72,15 @@ function PlayScreen({ navigation }){
 			<Text style={styles.smallText}> Showing Quests in Cheltenham </Text>
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
-				<QuestBox diff='Easy' title='Getting Around' id='0' navigation = {navigation} />
-				<QuestBox diff='Medium' title='Chelt Locals Only' id='1' navigation = {navigation}/>
-				<QuestBox diff='Hard' title='Mind Your Business' id='2' navigation = {navigation}/>
-				<QuestBox diff='Hard' title='More Map Icons' id='3' navigation = {navigation}/>
-				<QuestBox diff='Hard' title='To Show Stuff Happening' id='4' navigation = {navigation}/>
-				<QuestBox diff='Hard' title='You Can Scroll Down' id='5' navigation = {navigation}/>
-				<QuestBox diff='Medium' title='Load These Dynamically' id='6' navigation = {navigation}/>
-				<QuestBox diff='Easy' title='From the API' id='7' navigation = {navigation}/>
+		{/* Embedded react js code essentially acting as a for loop */}
+			{questsList.map((questInfo) => {
+				return (
+					<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
+				);
+			})}
 			</ScrollView>
 			</View>
-			<Button title='History' color='#56B09C' onPress={() => alert('Not Yet Implemented')} />
+			<Button title='History' color='#56B09C' onPress={() => getQuests()} />
 			</View>
 		</View>
 	);
