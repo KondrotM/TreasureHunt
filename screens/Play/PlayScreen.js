@@ -62,6 +62,7 @@ function PlayScreen({ navigation, questsToShow }){
 	// useEffect is called when the screen loads, as it has no triggers, [], it is only called once
 	useEffect(() => {
 		getQuests();
+		console.log(global.id);
 	},[]);
 
 

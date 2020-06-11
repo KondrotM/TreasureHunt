@@ -25,7 +25,8 @@ function sendMap( request ){
 	  		"&difficulty=" + request.difficulty +
 	  		"&description=" + request.description + 
 	  		"&lat=" + request.lat +
-	  		"&lng=" + request.lng
+	  		"&lng=" + request.lng +
+	  		"&id=" + global.id
 	}).then((response) => response.json()).then((responseJson) => alert(responseJson.msg));
 }
 

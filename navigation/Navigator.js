@@ -5,10 +5,11 @@ import LoadingScreen from '../screens/Loading';
 import RegisterScreen from '../screens/Register';
 import PlayScreen from '../screens/Play';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createSwitchNavigator} from 'react-navigation';
+import { useRoute } from '@react-navigation/native'
 
 // const HomeStack = createStackNavigator()
 
@@ -54,8 +55,26 @@ import {createSwitchNavigator} from 'react-navigation';
 const MainTabs = createBottomTabNavigator();
 
 export default function BottomTabNavigator({ navigation }){
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const route = useRoute();
+
+
+	useEffect(() => {
+		if (route.params){
+			if (route.params.login.msg.login == 'false') {
+				setIsLoggedIn(false);
+				global.id = '';
+			}
+			if (route.params.login.msg.login == 'true') {
+				setIsLoggedIn(true);
+				global.id = route.params.login.msg.id;
+			}
+		}
+	});
+
+	console.log(route.params);
 // export default class BottomTabNagivator extends React.Component {
 // 	constructor(){
 // 		super()
