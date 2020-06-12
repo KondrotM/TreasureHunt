@@ -7,6 +7,9 @@ import Navigator from './navigation/Navigator';
 import MapScreen from './screens/Map';
 import QuestDetailsScreen from './screens/QuestDetails';
 import QuestScreen from './screens/Quest';
+import CreateScreen from './screens/Create';
+import QuestEditorScreen from './screens/QuestEditor';
+import CreateCrumbScreen from './screens/CreateCrumb';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +48,33 @@ function MyStack() {
       <Stack.Screen
       name='Quest'
       component = {QuestScreen}
+      options={{
+       headerStyle: {
+          backgroundColor: '#caf7e2'
+        }
+      }}
+      />
+      <Stack.Screen
+      name='Create Quest'
+      component = {CreateScreen}
+      options={{
+       headerStyle: {
+          backgroundColor: '#caf7e2'
+        }
+      }}
+      />
+      <Stack.Screen
+      name='Quest Editor'
+      component = {QuestEditorScreen}
+      options={{
+       headerStyle: {
+          backgroundColor: '#caf7e2'
+        }
+      }}
+      />
+      <Stack.Screen
+      name='Create Breadcrumb'
+      component = {CreateCrumbScreen}
       options={{
        headerStyle: {
           backgroundColor: '#caf7e2'

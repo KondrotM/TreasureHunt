@@ -171,6 +171,30 @@
 			}
 		}
 
+		if ($_POST['fn'] == 'createCrumb') {
+
+			$id = $_POST['id'];
+			$hint = $_POST['hint'];
+			$lat = $_POST['lat'];
+			$lng = $_POST['lng'];
+
+			// check if these are empty, if yes, return "created" => "false" 
+			$name = $_POST['name'];
+			$riddle = $_POST['riddle'];
+			$answer = $_POST['answer'];
+
+
+			echo json_encode(["Type" => "Success", "created" => "true", "msg" => "Breadcrumb Created"]);
+		}
+
+		if ($_POST['fn'] == 'getUserQuests') {
+			$id = $_POST['id'];
+
+			// return an object with all the quests created by the user with id == $id
+			// use the same syntax as for fn=getQuests
+		}
+
+
 		// Signup/register, (on)
 		if ($_POST['fn'] == 'register') {
 			$username = $_POST['username'];

@@ -4,6 +4,7 @@ import CreateScreen from '../screens/Create';
 import LoadingScreen from '../screens/Loading';
 import RegisterScreen from '../screens/Register';
 import PlayScreen from '../screens/Play';
+import YourQuestsScreen from '../screens/YourQuests';
 
 import React, {useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -54,8 +55,10 @@ import { useRoute } from '@react-navigation/native'
 // export default MainTabs;
 const MainTabs = createBottomTabNavigator();
 
+global.id = '13';
+
 export default function BottomTabNavigator({ navigation }){
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const route = useRoute();
@@ -104,7 +107,7 @@ export default function BottomTabNavigator({ navigation }){
 
 				<MainTabs.Screen
 				name = "Create"
-				component={CreateScreen}
+				component={YourQuestsScreen}
 				/>
 
 				<MainTabs.Screen
