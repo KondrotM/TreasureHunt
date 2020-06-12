@@ -30,8 +30,9 @@
 					'id' => '3',
 					'title' => 'Mind Your Business',
 					'diff' => 'Hard'
-				]];
-				echo json_encode(["Type" => "Success", "msg" => "Maps Returned", "maps" => $obj]);
+				]
+			];
+			echo json_encode(["Type" => "Success", "msg" => "Maps Returned", "maps" => $obj]);
 		}
 
 		// Login, (on)
@@ -46,7 +47,7 @@
 			// First check if a username and password have been provided
 			if (empty($_POST['username']) | empty($_POST['password'])) {
 				// No username or password provided, so respond with an error
-				echo json_encode(["Type" => "Error", "Msg" => "Username and/or Password are empty."]);
+				echo json_encode(["Type" => "Error", "msg" => "Username and/or Password are empty."]);
 			} else {
 				// Both the username and password have been provided, so carry on...
 
@@ -61,7 +62,7 @@
 				} catch (PDOException $e) {
 					// If it fails, show the error and exit
 					// The strval() function converts the exception type to a string type
-					echo json_encode(["Type" => "Error", "Msg" => strval($e)]);
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
 					exit;
 				}
 
@@ -79,46 +80,73 @@
 					];
 
 					// and return a success response with the object we just made
-					echo json_encode(["Type" => "Success", "Msg" => $obj]);
+					echo json_encode(["Type" => "Success", "msg" => $obj]);
 					exit;
 				} else {
-					echo json_encode(["Type" => "Error", "Msg" => "Invalid username or password"]);
+					echo json_encode(["Type" => "Error", "msg" => "Invalid username or password"]);
 					exit;
 				}
 
 			}
 		}
 
-		// Signup/register
-		if($_POST['fn'] == 'register') {
+		// Signup/register, (on)
+		if ($_POST['fn'] == 'register') {
 			$username = $_POST['username'];
 			$password = $_POST['password'];
 			$email = $_POST['email'];
 
-			// rudimentary checks for username and password, you can use 'valid' or your own way in order to distinguish between username or email taken, (mk)
-			$valid = True;
-
-			// Check if username is valid
-			if ($username == 'Eric') {
-				$valid = False;
-			}
-			// Check if email is valid
-			if ($email == 'mail@123.com') {
-				$valid = False;
-			}
-
-			// Check if password is valid? nice-to-have feature, (mk)
-
-			if ($valid) {
-				// Register acount
-				echo json_encode(['Type' => 'Success', 'msg' => 'Account Registered']);
+			// First check if each of the required fields have been provided and show an error otherwise
+			if (empty($username)) {
+				echo json_encode(["Type" => "Error", "msg" => "Username is empty."]);
+			} else if (empty($password)) {
+				echo json_encode(["Type" => "Error", "msg" => "Password is empty."]);
+			} else if (strlen($password) < 6) { // if the length of the password string is under 6 characters
+				echo json_encode(["Type" => "Error", "msg" => "Password must be at least 6 characters long."]);
+			} else if (empty($email)) {
+				echo json_encode(["Type" => "Error", "msg" => "Email is empty."]);
 			} else {
-				echo json_encode(['Type' => 'Success', 'msg' => 'Username or Email already exists']);
+				// All fields supplied, so carry on
+
+				// Create a new variable called dbQuery that stores a preparational query to PDO. Once PDO has prepared the query, execute it with the appropriate variables.
+				// https://phpdelusions.net/pdo
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM tablelogin WHERE email=:email');
+					$dbQuery->execute(['email' => $email]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					exit;
+				}
+
+				$dbRow = $dbQuery->fetch();
+				if ($dbRow['email'] == $email) {
+					// there is an entry found in the database that matches the email, so show an error that the email is already in use
+					echo json_encode(["Type" => "Error", "msg" => "Email already in use"]);
+				} else if ($dbRow['username'] == $username) {
+					echo json_encode(["Type" => "Error", "msg" => "Username already in use"]);
+				} else {
+					// email and username not currently in use, so carry on
+
+					// Hash the password with sha1 before storing it
+					$password = sha1($password);
+					
+					// if we got to this point, both the password fields match and the email and pass aren't already in use, so make the new account entry in the database
+					try {
+						// Make the account
+						$dbQueryTwo = $db->prepare('INSERT INTO `tablelogin` (`userID`, `username`, `password`, `email`) VALUES (NULL, :username, :password, :email)');
+						$dbQueryTwo->execute(['email' => $email, 'password' => $password, 'username' => $username]);
+						echo json_encode(['Type' => 'Success', 'msg' => 'Account registered.']);
+					} catch (PDOException $e) {
+						// If it fails, show the error and exit
+						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+						exit;
+					}
+				}
 			}
-
 		}
+	} else {
+		echo json_encode(["Type" => "Error", "msg" => "?fn not specified."]);
 	}
-	 else {
-
-		echo json_encode(["Type" => "Success", "msg" => "Map Not Created"]);
-	}
+?>
