@@ -6,6 +6,15 @@
 	// using include_once to make sure it's not starting the session more than once, (on)
 	include_once('session.php');
 
+	// generate a universal unique identifier
+	function genUUID() {
+		return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+		mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+		mt_rand(0, 0xffff),
+		mt_rand(0, 0x0fff) | 0x4000,
+		mt_rand(0, 0x3fff) | 0x8000,mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
+	}
+
 	if (isset($_POST['fn'])){
 
 		// Create quests
@@ -18,7 +27,7 @@
 			$userID = $_POST["userID"];
 
 			// Check if any of the required inputs are empty and respond with an error if they are
-			if (empty($mapName]) | empty($difficulty) | empty($description) | empty($latitude) | empty($longitude) | empty($userID)) {
+			if (empty($mapName) | empty($difficulty) | empty($description) | empty($latitude) | empty($longitude) | empty($userID)) {
 				echo json_encode(["Type" => "Error", "msg" => "One or more of the required inputs are empty."]);
 			} else {
 				
@@ -40,10 +49,41 @@
 					// there is an entry found in the database that matches the map name, so show an error that the map name is already in use
 					echo json_encode(["Type" => "Error", "msg" => "Map name already in use"]);
 				} else {
-					// map name not currently in use, so make the new quest entry in the database
+					// map name not currently in use, so make a new quest entry in the database and then the new quest entry
+
+					// generate a UUID
+					$uuid = genUUID();
+
+					// check if the UUID is already in use, and if so regenerate the UUID until it isn't
 					try {
-						$dbQueryTwo = $db->prepare('INSERT INTO `tablequests` (`mapID`, `userID`, `locationID`, `difficulty`, `mapName`, `description`, `crumbs`, `dateCreated`) VALUES (NULL, :userID, NULL, :difficulty, :mapName, :descr, NULL, NULL)');
-						$dbQueryTwo->execute(['userID' => $userID, 'difficulty' => $difficulty, 'mapName' => $mapName, 'descr' => $description]);
+						$dbQueryUUID = $db->prepare('SELECT locationUUID from `tablelocations` WHERE locationUUID=:uuid');
+						$dbQueryUUID->execute(['uuid' => $uuid]);
+						$dbRow = $dbQueryUUID->fetch();
+						while ($dbRow) {
+							$uuid = genUUID();
+							$dbQueryUUID->execute(['uuid' => $uuid]);
+							$dbRow = $dbQueryUUID->fetch();
+						}
+					} catch (PDOException $e) {
+						// If it fails, show the error and exit
+						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+						exit;
+					}
+
+					// we have a unique UUID now, so use it when adding the latitude and longitude to the database
+					try {
+						$dbQueryTwo = $db->prepare('INSERT INTO `tablelocations` (`locationUUID`, `userID`, `posX`, `posY`) VALUES (:uuid, :userID, :lng, :lat)');
+						$dbQueryTwo->execute(['userID' => $userID, 'lng' => $longitude, 'lat' => $latitude, 'uuid' => $uuid]);
+					} catch (PDOException $e) {
+						// If it fails, show the error and exit
+						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+						exit;
+					}
+
+					// add the quest entry to the tablequests in the database with the locationUUID
+					try {
+						$dbQueryTwo = $db->prepare('INSERT INTO `tablequests` (`mapID`, `userID`, `locationUUID`, `difficulty`, `mapName`, `description`, `crumbs`, `dateCreated`) VALUES (NULL, :userID, :locationUUID, :difficulty, :mapName, :descr, NULL, NULL)');
+						$dbQueryTwo->execute(['userID' => $userID, 'difficulty' => $difficulty, 'mapName' => $mapName, 'descr' => $description, 'locationUUID' => $uuid]);
 						echo json_encode(["Type" => "Success", "msg" => "Quest created."]);
 					} catch (PDOException $e) {
 						// If it fails, show the error and exit
@@ -57,17 +97,17 @@
 		// Get quests
 		if ($_POST['fn'] == 'getQuests') {
 			$obj = [
-			[
+				[
 					'id' => '1',
 					'title' => 'Getting Around',
 					'diff' => 'Easy'
 				],
-			[
+				[
 					'id' => '2',
 					'title' => 'Chelt Locals Only',
 					'diff' => 'Medium'
 				],
-			[
+				[
 					'id' => '3',
 					'title' => 'Mind Your Business',
 					'diff' => 'Hard'
@@ -86,7 +126,7 @@
 			//echo $password . "<br>";
 
 			// First check if a username and password have been provided
-			if (empty($username]) | empty($password])) {
+			if (empty($username) | empty($password)) {
 				// No username or password provided, so respond with an error
 				echo json_encode(["Type" => "Error", "msg" => "Username and/or Password are empty."]);
 			} else {
@@ -161,7 +201,6 @@
 					exit;
 				}
 
-				$dbRow = $dbQuery->fetch();
 				if ($dbRow['email'] == $email) {
 					// there is an entry found in the database that matches the email, so show an error that the email is already in use
 					echo json_encode(["Type" => "Error", "msg" => "Email already in use"]);
