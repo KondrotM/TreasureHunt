@@ -8,13 +8,54 @@
 
 	if (isset($_POST['fn'])){
 
-		// Create map
-		if ($_POST['fn'] == 'createMap') {
-			echo json_encode(["Type" => "Success", "msg" => "Map Created"]);
+		// Create quests
+		if ($_POST['fn'] == 'createQuest') {
+			$mapName = $_POST["mapName"];
+			$difficulty = $_POST["difficulty"];
+			$description = $_POST["description"];
+			$latitude = $_POST["lat"];
+			$longitude = $_POST["lng"];
+			$userID = $_POST["userID"];
+
+			// Check if any of the required inputs are empty and respond with an error if they are
+			if (empty($mapName]) | empty($difficulty) | empty($description) | empty($latitude) | empty($longitude) | empty($userID)) {
+				echo json_encode(["Type" => "Error", "msg" => "One or more of the required inputs are empty."]);
+			} else {
+				
+				// Create a new variable called dbQuery that stores a preparational query to PDO. Once PDO has prepared the query, execute it with the appropriate variables.
+				// https://phpdelusions.net/pdo
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM tablequests WHERE mapName=:mapName');
+					$dbQuery->execute(['mapName' => $mapName]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					exit;
+				}
+
+				$dbRow = $dbQuery->fetch();
+				// Check if a quest with the map name already exists
+				if ($dbRow['mapName'] == $mapName) {
+					// there is an entry found in the database that matches the map name, so show an error that the map name is already in use
+					echo json_encode(["Type" => "Error", "msg" => "Map name already in use"]);
+				} else {
+					// map name not currently in use, so make the new quest entry in the database
+					try {
+						$dbQueryTwo = $db->prepare('INSERT INTO `tablequests` (`mapID`, `userID`, `locationID`, `difficulty`, `mapName`, `description`, `crumbs`, `dateCreated`) VALUES (NULL, :userID, NULL, :difficulty, :mapName, :descr, NULL, NULL)');
+						$dbQueryTwo->execute(['userID' => $userID, 'difficulty' => $difficulty, 'mapName' => $mapName, 'descr' => $description]);
+						echo json_encode(["Type" => "Success", "msg" => "Quest created."]);
+					} catch (PDOException $e) {
+						// If it fails, show the error and exit
+						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+						exit;
+					}
+				}
+			}
 		}
 
 		// Get quests
-		if ($_POST['fn'] == 'getQuests'){
+		if ($_POST['fn'] == 'getQuests') {
 			$obj = [
 			[
 					'id' => '1',
@@ -45,14 +86,14 @@
 			//echo $password . "<br>";
 
 			// First check if a username and password have been provided
-			if (empty($_POST['username']) | empty($_POST['password'])) {
+			if (empty($username]) | empty($password])) {
 				// No username or password provided, so respond with an error
 				echo json_encode(["Type" => "Error", "msg" => "Username and/or Password are empty."]);
 			} else {
 				// Both the username and password have been provided, so carry on...
 
 				// Hash the password before checking it against the database
-				$password = sha1($_POST['password']);
+				$password = sha1($password);
 
 				// Create a new variable called dbQuery that stores a preparational query to PDO. Once PDO has prepared the query, execute it with the appropriate variables.
 				// https://phpdelusions.net/pdo
