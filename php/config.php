@@ -1,18 +1,14 @@
 <?php
-//outdated connection, but keep it as it has the uni database username and password, mk
+	ob_start(); // Show at least partial errors even if there was an error attempting to show an error
 
-// details to connect to server, mk
-$servername = "localhost";
-$DBusername = "group";
-$DBpassword = "0?4L5yyj";
-$DBname = "thenathanists_treasurehunt";
+	$dbUsername = "group";
+	$dbPassword = "0?4L5yyj";
+	$dbServer = "localhost";
+	$dbPort = "3306";
+	$dbDatabase = "thenathanists_treasurehunt";
 
-$connection = new mysqli($servername,$DBusername,$DBpassword,$DBname);
+	// Connect to the database
+	$db = new PDO("mysql:host=" . $dbServer . ";port=" . $dbPort . ";dbname=" . $dbDatabase, $dbUsername, $dbPassword);
 
-if($connection->connect_error){
-    die("Connection failed: ". $conn->connect_error);
-} else {
-  session_start();
-//  echo "connection successful";
-}
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 ?>
