@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     alignSelf: 'flex-start',
-    minWidth: '75%',
+    minWidth: '85%',
     maxWidth: '90%'
   },
   picker: {

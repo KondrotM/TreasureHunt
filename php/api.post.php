@@ -116,6 +116,28 @@
 			echo json_encode(["Type" => "Success", "msg" => "Maps Returned", "maps" => $obj]);
 		}
 
+		if ($_POST['fn'] == 'getQuestDetails') {
+			// Quest details used to view when user is editing them through the quest editor
+
+			$quest_id = $_POST['questId'];
+
+			// 
+			// Code to fetch quest details
+			// 
+
+			// fn stays as editMap, the rest are set according to fetched data
+			$obj = [
+				'fn' => 'editMap',
+				'lat' => 23.042,
+				'lng' => 42.043,
+				'difficulty' => 'easy',
+				'descripition' => 'Here is a description describing a map',
+				'name' => 'Locals Only'
+			];
+
+			echo json_encode(["Type" => "Success", "mapDetails" => $obj]);
+		}
+
 		// Login, (on)
 		if ($_POST['fn'] == 'login') {
 			$username = $_POST['username'];
@@ -171,6 +193,26 @@
 			}
 		}
 
+		if ($_POST['fn'] == 'editMap') {
+			$quest_id = $_POST['questId'];
+
+			// 
+			// Find quest
+			// 
+
+			$map_name = $_POST['mapName'];
+			$difficulty = $_POST['difficulty'];
+			$description = $_POST['description'];
+			$lat = $_POST['lat'];
+			$lng = $_POST['lng'];
+
+			// 
+			// Update map details
+			// 
+
+			echo json_encode(["Type" => "Success", "msg" => "Map Details Updated"]);
+		}
+
 		if ($_POST['fn'] == 'createCrumb') {
 
 			$id = $_POST['id'];
@@ -188,10 +230,88 @@
 		}
 
 		if ($_POST['fn'] == 'getUserQuests') {
+			// Return an object with all the quests created by the user with user_id == $id
+			// Used for quest editor overview 
 			$id = $_POST['id'];
 
-			// return an object with all the quests created by the user with id == $id
-			// use the same syntax as for fn=getQuests
+			$obj = [
+				[
+					'id' => '2',
+					'title' => 'Chelt Locals Only',
+					'diff' => 'Medium'
+				],
+				[
+					'id' => '3',
+					'title' => 'Mind Your Business',
+					'diff' => 'Hard'
+				],
+				[
+					'id' => '4',
+					'title' => 'Quest in progerss',
+					'diff' => 'Easy'
+				]
+			];
+
+			echo json_encode(["Type" => "Success", "msg" => "Maps Returned", "maps" => $obj]);
+		}
+
+		if ($_POST['fn'] == 'getQuestCrumbs') {
+			// Return the crumbs for a specific quest
+			// User in the quest editor
+			// Return with the greatest id last
+			$obj = [
+				[
+					'id' => '1',
+					'name' => 'Go to the hills'
+				],
+				[
+					'id' => '2',
+					'name' => 'Explore the road'
+				],
+				[
+					'id' => '3',
+					'name' => 'Through the forest'
+				]
+			];
+			echo json_encode(["Type" => "Success", "msg" => "Crumbs Returned", "crumbs" => $obj]);
+		}
+
+		if ($_POST['fn'] == 'deleteCrumb') {
+			// User request to delete a breadcrumb
+			$crumb_id = $_POST['crumbId'];
+			$quest_id = $_POST['questId'];
+
+			// 
+			// Code to delete crumb
+			// 
+
+			// 
+			// Get new list of breadcrumbs still in quest
+			// 
+
+			$obj = [
+				[
+					'id' => '1',
+					'name' => 'Go to the hills'
+				],
+				[
+					'id' => '3',
+					'name' => 'Through the forest'
+				]
+			];
+
+			echo json_encode(["Type" => "Success", "deleted" => "true", "msg" => "Crumb Deleted", "crumbs" => $obj]);
+
+		}
+
+		if ($_POST['fn'] == 'deleteQuest') {
+			$quest_id = $_POST['questId'];
+
+			// 
+			// Code to delete quest
+			// 
+
+			echo json_encode(["Type" => "Success", "deleted" => "true", "msg" => "Quest Deleted"]);
 		}
 
 

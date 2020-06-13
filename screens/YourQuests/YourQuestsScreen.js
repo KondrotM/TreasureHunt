@@ -3,7 +3,7 @@ import React, { Component, useEffect, useState} from 'react';
 import { Text, Button, TouchableHighlight, View, SafeAreaView, ScrollView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
-import { faBin } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 // import { useNavigation } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -81,7 +81,7 @@ function PlayScreen({ navigation, questsToShow }){
 			})}
 			</ScrollView>
 			</View>
-			<Button title='Create new Quest' color='#56B09C' onPress={() => (navigation.navigate('Create Quest'))} />
+			<Button title='Create new Quest' color='#56B09C' onPress={() => (navigation.navigate('Create Quest', {mode: 'Create'}))} />
 			</View>
 		</View>
 	);

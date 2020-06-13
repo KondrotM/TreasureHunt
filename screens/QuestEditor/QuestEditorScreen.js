@@ -1,43 +1,54 @@
 import styles from './styles';
 import React, { Component, useEffect, useState} from 'react';
-import { Text, Button, TouchableHighlight, View, SafeAreaView, ScrollView } from 'react-native';
+import { Text, Button, TouchableHighlight, View, SafeAreaView, ScrollView, Alert} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 // import { useNavigation } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { MapScreen } from '../Map';
 import { StackNavigator } from 'react-navigation';
+import { useRoute } from '@react-navigation/native'
 
 
 
 
-function QuestBox({navigation, title, diff, id}) {
-	return (
-		<TouchableHighlight 
-			style={styles.questBox} >
 
-			<View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
-
-				<View style={{flex:1, marginLeft: 15, alignItems:'flex-start'}}>
-
-					<FontAwesomeIcon icon={faMap} size={25} />
-
-					<View style={{ flex:1, marginLeft: -7, flexDirection: 'row'}}>
-						<Text>{diff}</Text>
-					</View>
-				</View>
-
-				<View style={{flex:3}}>
-					<Text style={styles.questText}>{title}</Text>
-				</View>
-			</View>
-		</TouchableHighlight>
-	);
-}
 
 function QuestEditorScreen({ navigation, questsToShow }){
 
+	function QuestBox({navigation, title, id}) {
+		return (
+			<TouchableHighlight 
+				style={styles.questBox} >
+
+				<View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
+
+					<View style={{flex:1, marginLeft: 15, alignItems:'flex-start'}}>
+						<FontAwesomeIcon icon={faMap} size={25} />
+					</View>
+
+					<View style={{flex:3}}>
+						<Text style={styles.questText}>{title}</Text>
+					</View>
+					<FontAwesomeIcon icon={faTrash} style={{color: '#386150'}} size={20} onPress={() => (Alert.alert('Are you sure?','Are you sure you want to delete this breadcrumb?',
+						[
+						{
+							text: 'No',
+							style: 'cancel'
+						},
+						{
+							text: 'Yes',
+							onPress: () => deleteCrumb(id),
+						}
+						]))}/>
+				</View>
+			</TouchableHighlight>
+		);
+	}
+
+	const route = useRoute();
 
 	const [questDetails, setQuestDetails] = useState({
 		id: '',
@@ -51,7 +62,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 
 
 	// State hook which holds quest information, mk
-	const [questsList, setQuestsList] = useState([
+	const [crumbsList, setCrumbsList] = useState([
 		]);
 
 
@@ -62,36 +73,90 @@ function QuestEditorScreen({ navigation, questsToShow }){
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: 'fn=getQuestEditorDetails'
+			body: 'fn=getQuestCrumbs'
 		}).then(
 		(response) => response.json()
 		).then(
-		(json) => setQuestsList(json.maps)
+		(json) => setCrumbsList(json.crumbs)
 		);
 	};
+
+	function deleteCrumb(crumbId){
+		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: 'fn=deleteCrumb' + 
+			'&crumbId=' + crumbId + 
+			'&questId=' + questDetails.id
+		}).then(
+		(response) => response.json()
+		).then(
+		(json) => setCrumbsList(json.crumbs)
+		);
+	};
+
+	function deleteQuest(questId) {
+		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: 'fn=deleteQuest' + 
+				'&questId' + questId
+		}).then(
+		(response) => response.json()
+		).then(
+		(json) => handleDeleteQuest(json.msg)
+		);
+	};
+
+	function handleDeleteQuest(msg) {
+		alert(msg);
+		navigation.navigate('Create');
+	}
 
 	// useEffect is called when the screen loads, as it has no triggers, [], it is only called once
 	useEffect(() => {
 		getQuestEditorDetails();
-		console.log(global.id);
-	});
+		console.log(global.id, route.params.questId);
+	},[]);
 
 
 	return (
 		<View style={styles.container}>
 			<View style = {styles.formContainer}>
-			<Text style={styles.titleText}> Your Quests </Text>
+			<Text style={styles.titleText}> Quest Breadcrumbs </Text>
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
 		{/* Embedded react js code essentially acting as a for loop */}
-			{questsList.map((questInfo) => {
+			{crumbsList.map((questInfo) => {
 				return (
-					<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
+					<QuestBox title={questInfo.name} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
 				);
 			})}
 			</ScrollView>
 			</View>
+			<View style={{marginBottom: 10}}>
 			<Button title='Create new Breadcrumb' color='#56B09C' onPress={() => (navigation.navigate('Create Breadcrumb', {quest : questDetails}))} />
+			</View>
+			<View style={{marginBottom: 10}}>
+			<Button title='Edit Quest Details' color='#56B09C' onPress={() => (navigation.navigate('Create Quest', {mode : 'Edit'}))} />
+			</View>
+			<View style={{marginBottom: 10}}>
+			<Button title='Delete Quest' color='#386150' onPress={() => (Alert.alert('Are you sure?','Are you sure you want to delete this quest?',
+						[
+						{
+							text: 'No',
+							style: 'cancel'
+						},
+						{
+							text: 'Yes',
+							onPress: () => deleteQuest(questDetails.id),
+						}
+						]))}/>
+			</View>
 			</View>
 		</View>
 	);

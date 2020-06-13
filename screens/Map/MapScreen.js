@@ -86,7 +86,7 @@ function MapScreen( { navigation }){
         </MapView>
         <Text style={styles.mapInfoText}>Coords: {mapCoords.latitude.toPrecision(16)}, {mapCoords.longitude.toPrecision(16)}, Location: {lat}, {lng}, Marker Location: {markerCoords.latitude}, {markerCoords.longitude}</Text>
         <View style={styles.mapButton}>
-            <Button color='#56B09C' title='Select' onPress={() => {navigation.navigate('Create',{coords: markerCoords})}}/>
+            <Button color='#56B09C' title='Select' onPress={() => {navigation.navigate('Create Quest',{coords: markerCoords})}}/>
         </View>
       </View>
 
