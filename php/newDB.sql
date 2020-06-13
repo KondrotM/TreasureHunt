@@ -11,7 +11,7 @@ CREATE TABLE `users` (
 	`hashedPass` varchar(256) NOT NULL, -- using PHP password_create() and password_verify()
 	`email` varchar(256) NOT NULL,
 	PRIMARY KEY (`userID`), -- make the userID column the primary key
-	ADD UNIQUE KEY `username` (`username`) -- also require usernames to be unique
+	UNIQUE KEY `username` (`username`) -- also require usernames to be unique
 );
 
 -- quests table
@@ -118,4 +118,16 @@ CREATE TABLE `hints` (
 		FOREIGN KEY (`crumbID`) REFERENCES `crumbs`(`crumbID`)
 		ON DELETE CASCADE
 		ON UPDATE RESTRICT
+);
+
+-- progress table
+DROP TABLE IF EXISTS `progresses`;
+CREATE TABLE `progresses` (
+	`userID` int(11) NOT NULL,
+	`crumbID` int(11) NOT NULL,
+	`completed` BOOLEAN NOT NULL DEFAULT 'FALSE',
+	CONSTRAINT `foreignKey_progresses_crumbID`
+		FOREIGN KEY (`crumbID`) REFERENCES `crumbs`(`crumbID`)
+		ON DELETE CASCADE
+		ON UPDATE RESTRICT,
 );
