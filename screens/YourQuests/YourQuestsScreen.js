@@ -52,8 +52,8 @@ function PlayScreen({ navigation, questsToShow }){
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			// body: 'fn=getUserQuests'
-			body: 'fn=getQuests'
+			body: 'fn=getUserQuests'
+			// body: 'fn=getQuests'
 		}).then(
 		(response) => response.json()
 		).then(
