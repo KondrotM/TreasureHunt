@@ -314,6 +314,37 @@
 
 		}
 
+		if ($_POST['fn'] == 'getQuestOverview') {
+			$quest_id = ['questId'];
+			$user_id = ['userId'];
+
+			// 
+			// Get quest name, diff, desc, starting coords
+			// 
+
+			// 
+			// Get total quest breadcrumbs
+			// 
+
+			// 
+			// Get breadcrumbs completed by user
+			// 
+
+			// Please keep this object syntax
+			$obj = [
+				'name' => 'Quest Name',
+				'id' => $quest_id,
+				'description' => 'Check out this brand new quest! You can explore all around the local town',
+				'difficulty' => 'Easy',
+				'lat' => 42.02,
+				'lng' => 46.51,
+				'totalCrumbs' => 6,
+				'completedCrumbs' => 4
+			];
+
+			echo json_encode(["Type" => "Success", "msg" => "Quest Overview Retrieved", "questDetails" => $obj]);
+		}	
+
 		if ($_POST['fn'] == 'deleteQuest') {
 			$quest_id = $_POST['questId'];
 
