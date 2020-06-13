@@ -115,7 +115,7 @@
 			}
 
 			$questsObj;
-			$dbRow = $dbQueryUUID->fetch();
+			$dbRow = $dbQuery->fetch();
 			while ($dbRow) { // for each row returned, add it to the questsObj
 				$questsObj += $dbRow;
 			}
