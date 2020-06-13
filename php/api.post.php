@@ -307,7 +307,7 @@
 			$userID = $_POST['userID'];
 
 			if (empty($userID)) {
-				echo json_encode(["Type" => "Error", "msg" => "UserID is empty."]);
+				echo json_encode(["Type" => "Error", "msg" => "userID is empty."]);
 				http_response_code(400);
 			} else {
 				try {
@@ -322,7 +322,7 @@
 				}
 	
 				$questsObj;
-				$dbRow = $dbQueryUUID->fetch();
+				$dbRow = $dbQuery->fetch();
 				while ($dbRow) { // for each row returned, add it to the questsObj
 					$questsObj += $dbRow;
 				}
@@ -354,8 +354,64 @@
 			*/
 		}
 
+		if ($_POST['fn'] == "getCrumbData") {
+			$crumbID = $_POST['crumbID'];
+
+			if (empty($questID)) {
+				echo json_encode(["Type" => "Error", "msg" => "questID is empty."]);
+				http_response_code(400);
+			} else {
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM crumbs WHERE questID=:questID');
+					$dbQuery->execute(['questID' => $questID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+
+				$dbRow = $dbQuery->fetch();
+				if ($dbRow) {
+					echo json_encode(["Type" => "Success", "msg" => "Crumb returned.", "crumb" => $dbRow]);
+				} else {
+					echo json_encode(["Type" => "Error", "msg" => "No crumbs found with that crumbID."]);
+					http_response_code(500);
+				}
+			}
+		}
+
 		if ($_POST['fn'] == 'getQuestCrumbs') {
 			// Return the crumbs for a specific quest
+
+			$questID = $_POST['questID'];
+
+			if (empty($questID)) {
+				echo json_encode(["Type" => "Error", "msg" => "questID is empty."]);
+				http_response_code(400);
+			} else {
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM crumbs WHERE questID=:questID');
+					$dbQuery->execute(['questID' => $questID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+	
+				$crumbsObj;
+				$dbRow = $dbQuery->fetch();
+				while ($dbRow) { // for each row returned, add it to the crumbsObj
+					$crumbsObj += $dbRow;
+				}
+				echo json_encode(["Type" => "Success", "msg" => "Crumbs returned.", "crumbs" => $crumbsObj]);
+			}
+
+
+			/*
 			// User in the quest editor
 			// Return with the greatest id last
 			$obj = [
@@ -373,6 +429,7 @@
 				]
 			];
 			echo json_encode(["Type" => "Success", "msg" => "Crumbs Returned", "crumbs" => $obj]);
+			*/
 		}
 
 		if ($_POST['fn'] == 'deleteCrumb') {
