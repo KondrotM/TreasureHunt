@@ -37,7 +37,7 @@
 				// https://phpdelusions.net/pdo
 				try {
 					// Check if the email is already in use
-					$dbQuery = $db->prepare('SELECT * FROM tablequests WHERE mapName=:mapName');
+					$dbQuery = $db->prepare('SELECT * FROM quests WHERE mapName=:mapName');
 					$dbQuery->execute(['mapName' => $mapName]);
 				} catch (PDOException $e) {
 					// If it fails, show the error and exit
@@ -60,7 +60,7 @@
 
 					// check if the UUID is already in use, and if so regenerate the UUID until it isn't
 					try {
-						$dbQueryUUID = $db->prepare('SELECT locationUUID from `tablelocations` WHERE locationUUID=:uuid');
+						$dbQueryUUID = $db->prepare('SELECT locationUUID from `locations` WHERE locationUUID=:uuid');
 						$dbQueryUUID->execute(['uuid' => $uuid]);
 						$dbRow = $dbQueryUUID->fetch();
 						while ($dbRow) {
@@ -77,8 +77,8 @@
 
 					// we have a unique UUID now, so use it when adding the latitude and longitude to the database
 					try {
-						$dbQueryTwo = $db->prepare('INSERT INTO `tablelocations` (`locationUUID`, `userID`, `posX`, `posY`) VALUES (:uuid, :userID, :lng, :lat)');
-						$dbQueryTwo->execute(['userID' => $userID, 'lng' => $longitude, 'lat' => $latitude, 'uuid' => $uuid]);
+						$dbQueryTwo = $db->prepare('INSERT INTO `tablelocations` (`locationUUID`, `latitude`, `longitude`) VALUES (:uuid, :lat, :lng)');
+						$dbQueryTwo->execute(['lng' => $longitude, 'lat' => $latitude, 'uuid' => $uuid]);
 					} catch (PDOException $e) {
 						// If it fails, show the error and exit
 						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
@@ -88,7 +88,7 @@
 
 					// add the quest entry to the tablequests in the database with the locationUUID
 					try {
-						$dbQueryTwo = $db->prepare('INSERT INTO `tablequests` (`mapID`, `userID`, `locationUUID`, `difficulty`, `mapName`, `description`, `crumbs`, `dateCreated`) VALUES (NULL, :userID, :locationUUID, :difficulty, :mapName, :descr, NULL, NULL)');
+						$dbQueryTwo = $db->prepare('INSERT INTO `quests` (`questID`, `userID`, `locationUUID`, `difficulty`, `mapName`, `description`, `dateCreated`) VALUES (NULL, :userID, :locationUUID, :difficulty, :mapName, :descr, NULL)');
 						$dbQueryTwo->execute(['userID' => $userID, 'difficulty' => $difficulty, 'mapName' => $mapName, 'descr' => $description, 'locationUUID' => $uuid]);
 						echo json_encode(["Type" => "Success", "msg" => "Quest created."]);
 					} catch (PDOException $e) {
@@ -168,7 +168,7 @@
 				// Create a new variable called dbQuery that stores a preparational query to PDO. Once PDO has prepared the query, execute it with the appropriate variables.
 				// https://phpdelusions.net/pdo
 				try {
-					$dbQuery = $db->prepare('SELECT * FROM tablelogin WHERE username=:username AND password=:password');
+					$dbQuery = $db->prepare('SELECT * FROM users WHERE username=:username AND hashedPass=:password');
 					$dbQuery->execute([':username' => $username, ':password' => $password]);
 				} catch (PDOException $e) {
 					// If it fails, show the error and exit
@@ -351,7 +351,7 @@
 				// https://phpdelusions.net/pdo
 				try {
 					// Check if the email is already in use
-					$dbQuery = $db->prepare('SELECT * FROM tablelogin WHERE email=:email');
+					$dbQuery = $db->prepare('SELECT * FROM users WHERE email=:email');
 					$dbQuery->execute(['email' => $email]);
 				} catch (PDOException $e) {
 					// If it fails, show the error and exit
@@ -376,7 +376,7 @@
 					// if we got to this point, both the password fields match and the email and pass aren't already in use, so make the new account entry in the database
 					try {
 						// Make the account
-						$dbQueryTwo = $db->prepare('INSERT INTO `tablelogin` (`userID`, `username`, `password`, `email`) VALUES (NULL, :username, :password, :email)');
+						$dbQueryTwo = $db->prepare('INSERT INTO `users` (`userID`, `username`, `hashedPass`, `email`) VALUES (NULL, :username, :password, :email)');
 						$dbQueryTwo->execute(['email' => $email, 'password' => $password, 'username' => $username]);
 						echo json_encode(['Type' => 'Success', 'msg' => 'Account registered.']);
 					} catch (PDOException $e) {

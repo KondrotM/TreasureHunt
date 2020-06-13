@@ -32,7 +32,6 @@ CREATE TABLE `quests` (
 	`difficulty` tinyint NOT NULL DEFAULT '0', -- tinyint allows for max 1 byte worth of integer characters, a max value of ~255
 	`mapName` varchar(48) NOT NULL,
 	`description` varchar(2048), -- varchar(2048) allows for almost roughly 3 paragraphs of latin-based text (tested based on character count of a generated lorem ipsum text of 5 paragraphs)
-	`crumbs` int(11) NOT NULL DEFAULT '0',
 	`dateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`questID`),
 	CONSTRAINT `foreignKey_quests_userID`
