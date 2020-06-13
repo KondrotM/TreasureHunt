@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
   button: {
     color: '#56B09C'
@@ -16,7 +16,16 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     color: '#56B09C',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    marginLeft: '0%'
+  },
+  mapContainer:{
+    height: 200,
+    minWidth: '85%'
+  },
+  map: {
+    width: '100%',
+    height: '100%'
   },
 	titleText: {
 		fontSize: 24,
@@ -32,7 +41,7 @@ const styles = StyleSheet.create({
     padding: 8,
     marginTop: 8,
     marginBottom: 8,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     minWidth: '85%',
     maxWidth: '90%'
   },
