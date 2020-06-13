@@ -14,6 +14,15 @@ CREATE TABLE `users` (
 	UNIQUE KEY `username` (`username`) -- also require usernames to be unique
 );
 
+-- locations table
+DROP TABLE IF EXISTS `locations`;
+CREATE TABLE `locations` (
+	`locationUUID` char(36) NOT NULL,
+	`latitude` decimal(10,7) NOT NULL,
+	`longitude` decimal(10,7) NOT NULL,
+	PRIMARY KEY(`locationUUID`)
+);
+
 -- quests table
 DROP TABLE IF EXISTS `quests`;
 CREATE TABLE `quests` (
@@ -26,10 +35,10 @@ CREATE TABLE `quests` (
 	`crumbs` int(11) NOT NULL DEFAULT '0',
 	`dateCreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (`questID`),
-	CONSTRAINT `foreignKey_quests_userID` -- all foreign keys follow the naming scheme "foreignKey_currentTableName_columnName"
+	CONSTRAINT `foreignKey_quests_userID`
 		FOREIGN KEY (`userID`) REFERENCES `users`(`userID`)
 		ON DELETE CASCADE
-		ON UPDATE RESTRICT,
+		ON UPDATE RESTRICT, -- all foreign keys follow the naming scheme "foreignKey_currentTableName_columnName"
 	CONSTRAINT `foreignKey_quests_locationUUID`
 		FOREIGN KEY (`locationUUID`) REFERENCES `locations`(`locationUUID`)
 		ON DELETE CASCADE
@@ -99,15 +108,6 @@ CREATE TABLE `riddles` (
 		ON UPDATE RESTRICT
 );
 
--- locations table
-DROP TABLE IF EXISTS `locations`;
-CREATE TABLE `locations` (
-	`locationUUID` char(36) NOT NULL,
-	`latitude` decimal(10,7) NOT NULL,
-	`longitude` decimal(10,7) NOT NULL,
-	PRIMARY KEY(`locationUUID`)
-);
-
 -- hints table
 DROP TABLE IF EXISTS `hints`;
 CREATE TABLE `hints` (
@@ -125,9 +125,9 @@ DROP TABLE IF EXISTS `progresses`;
 CREATE TABLE `progresses` (
 	`userID` int(11) NOT NULL,
 	`crumbID` int(11) NOT NULL,
-	`completed` BOOLEAN NOT NULL DEFAULT 'FALSE',
+	`completed` BOOLEAN NOT NULL DEFAULT FALSE,
 	CONSTRAINT `foreignKey_progresses_crumbID`
 		FOREIGN KEY (`crumbID`) REFERENCES `crumbs`(`crumbID`)
 		ON DELETE CASCADE
-		ON UPDATE RESTRICT,
+		ON UPDATE RESTRICT
 );
