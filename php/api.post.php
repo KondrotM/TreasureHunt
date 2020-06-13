@@ -149,23 +149,29 @@
 
 			$questID = $_POST['questID'];
 
-			try {
-				// Check if the email is already in use
-				$dbQuery = $db->prepare('SELECT * FROM quests WHERE questID=:questID');
-				$dbQuery->execute();
-			} catch (PDOException $e) {
-				// If it fails, show the error and exit
-				echo json_encode(["Type" => "Error", "msg" => strval($e)]);
-				http_response_code(500);
-				exit;
-			}
-
-			$dbRow = $dbQueryUUID->fetch();
-			if ($dbRow) {
-				echo json_encode(["Type" => "Success", "msg" => "Quest returned.", "quests" => $dbRow]);
+			if (empty($questID)) {
+				// No username or password provided, so respond with an error
+				echo json_encode(["Type" => "Error", "msg" => "questID is empty."]);
+				http_response_code(400);
 			} else {
-				echo json_encode(["Type" => "Error", "msg" => "No quests found with that questID."]);
-				http_response_code(500);
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM quests WHERE questID=:questID');
+					$dbQuery->execute();
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+	
+				$dbRow = $dbQueryUUID->fetch();
+				if ($dbRow) {
+					echo json_encode(["Type" => "Success", "msg" => "Quest returned.", "quests" => $dbRow]);
+				} else {
+					echo json_encode(["Type" => "Error", "msg" => "No quests found with that questID."]);
+					http_response_code(500);
+				}
 			}
 
 			/*
@@ -261,9 +267,10 @@
 			echo json_encode(["Type" => "Success", "msg" => "Map Details Updated"]);
 		}
 
+		// Create a new crumb
 		if ($_POST['fn'] == 'createCrumb') {
 
-			$id = $_POST['id'];
+			//$id = $_POST['id'];
 			$hint = $_POST['hint'];
 			$lat = $_POST['lat'];
 			$lng = $_POST['lng'];
