@@ -270,23 +270,66 @@
 		// Create a new crumb
 		if ($_POST['fn'] == 'createCrumb') {
 
-			//$id = $_POST['id'];
-			$hint = $_POST['hint'];
-			$lat = $_POST['lat'];
-			$lng = $_POST['lng'];
+			$questID = $_POST['questID'];
+			$order = $_POST['order'];
+			$hints = $_POST['hints'];
 
+			if (empty($questID) | empty($order) | empty($hints)) {
+				echo json_encode(["Type" => "Error", "msg" => "One or more of the required inputs are empty."]);
+				http_response_code(400);
+			} else {
+				try {
+					$dbQuery = $db->prepare('INSERT INTO `crumbs` (`crumbID`, `questID`, `order`, `hints`) VALUES (NULL, :questID, :order, :hints)');
+					$dbQuery->execute(['questID' => $questID, 'order' => $order, 'hints' => $hints]);
+					echo json_encode(['Type' => 'Success', 'created' => 'true', 'msg' => 'Breadcrumb created.']);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+			}
+
+			/*
 			// check if these are empty, if yes, return "created" => "false" 
 			$name = $_POST['name'];
 			$riddle = $_POST['riddle'];
 			$answer = $_POST['answer'];
 
-
 			echo json_encode(["Type" => "Success", "created" => "true", "msg" => "Breadcrumb Created"]);
+			*/
 		}
 
 		if ($_POST['fn'] == 'getUserQuests') {
 			// Return an object with all the quests created by the user with user_id == $id
-			// Used for quest editor overview 
+			// Used for quest editor overview
+
+			$userID = $_POST['userID'];
+
+			if (empty($userID)) {
+				echo json_encode(["Type" => "Error", "msg" => "UserID is empty."]);
+				http_response_code(400);
+			} else {
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM quests WHERE userID=:userID');
+					$dbQuery->execute(['userID' => $userID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+	
+				$questsObj;
+				$dbRow = $dbQueryUUID->fetch();
+				while ($dbRow) { // for each row returned, add it to the questsObj
+					$questsObj += $dbRow;
+				}
+				echo json_encode(["Type" => "Success", "msg" => "Quests returned.", "quests" => $questsObj]);
+			}
+
+			/*
 			$id = $_POST['id'];
 
 			$obj = [
@@ -308,6 +351,7 @@
 			];
 
 			echo json_encode(["Type" => "Success", "msg" => "Maps Returned", "maps" => $obj]);
+			*/
 		}
 
 		if ($_POST['fn'] == 'getQuestCrumbs') {
