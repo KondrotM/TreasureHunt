@@ -273,6 +273,73 @@
 			echo json_encode(["Type" => "Success", "msg" => "Map Details Updated"]);
 		}
 
+				if ($_POST['fn'] == 'getCrumbDetails') {
+			$quest_id = $_POST['questId'];
+			$user_id = $_POST['userId'];
+
+			// 
+			// Find the first not-completed crumb by user for specified quest
+			// 
+
+			// 
+			// Return crumb details
+			// 
+
+			$obj = [
+				'questId' => 2,
+				'crumbId' => 3,
+				'questName' => 'Getting Around',
+				'crumbName' => 'Down the Road',
+				'riddle' => 'Here is a riddle',
+				'hint' => 'Riddle hint',
+				'answer' => 'Ans',
+				'difficulty' => 'easy',
+				'crumbPos' => 3,
+				'totalCrumbs' => 6,
+				// lat and lng of crumb
+				'lat' => 43.125,
+				'lng' => 2.512
+			];
+
+					echo json_encode(["Type" => "Success", "details" => $obj]);
+		}
+
+		if ($_POST['fn'] == 'completeCrumb') {
+			$crumb_id = $_POST['crumbId'];
+			$user_id = $_POST['userId'];
+
+			// 
+			// Set the crumb as complete
+			// 
+
+			// 
+			// Get the next crumb details and return them
+			// 
+
+			// 
+			// If the player completed the last crumb in the quest, return +1
+			// so then the completion will say 7/6, i'll further handle the quest being completed react-side
+			// 
+
+			$obj = [
+				'questId' => 2,
+				'crumbId' => 5,
+				'questName' => 'Getting Around',
+				'crumbName' => "Bag's in the river",
+				'riddle' => 'Here is a riddle',
+				'hint' => 'Riddle hint',
+				'answer' => 'Ans',
+				'difficulty' => 'easy',
+				'crumbPos' => 4,
+				'totalCrumbs' => 6,
+				// lat and lng of crumb
+				'lat' => 43.125,
+				'lng' => 2.512
+			];
+
+			echo json_encode(["Type" => "Success", "details" => $obj]);
+		}
+
 		// Create a new crumb
 		if ($_POST['fn'] == 'createCrumb') {
 

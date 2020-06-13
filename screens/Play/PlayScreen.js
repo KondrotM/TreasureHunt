@@ -73,6 +73,7 @@ function PlayScreen({ navigation, questsToShow }){
 			<Text style={styles.smallText}> Showing Quests in Cheltenham </Text>
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
+			<QuestBox diff='Easy' title='Fix this' id='2' navigation={navigation}/>
 		{/* Embedded react js code essentially acting as a for loop */}
 			{questsList.map((questInfo) => {
 				return (
@@ -81,7 +82,7 @@ function PlayScreen({ navigation, questsToShow }){
 			})}
 			</ScrollView>
 			</View>
-			<Button title='History' color='#56B09C' onPress={() => getQuests()} />
+			<Button title='History' color='#56B09C' onPress={() => navigation.navigate('Quest', {id: '5'})} />
 			</View>
 		</View>
 	);
