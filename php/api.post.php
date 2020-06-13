@@ -3,7 +3,7 @@
 	include('config.php');
 
 	// start the session if it hasn't been already
-	// using include_once to make sure it's not starting the session more than once, (on)
+	// using include_once to make sure it's not starting the session more than once
 	include_once('session.php');
 
 	// generate a universal unique identifier
@@ -145,7 +145,7 @@
 			echo json_encode(["Type" => "Success", "mapDetails" => $obj]);
 		}
 
-		// Login, (on)
+		// Login
 		if ($_POST['fn'] == 'login') {
 			$username = $_POST['username'];
 			$password = $_POST['password'];
@@ -325,7 +325,7 @@
 		}
 
 
-		// Signup/register, (on)
+		// Signup/register
 		if ($_POST['fn'] == 'register') {
 			$username = $_POST['username'];
 			$password = $_POST['password'];
