@@ -300,6 +300,35 @@
 			*/
 		}
 
+		// Get hint from crumbID
+		if ($_POST['fn'] == 'getHint') {
+			$crumbID = $_POST['crumbID'];
+
+			if (empty($crumbID)) {
+				echo json_encode(["Type" => "Error", "msg" => "crumbID is empty."]);
+				http_response_code(400);
+			} else {
+				try {
+					// Check if the email is already in use
+					$dbQuery = $db->prepare('SELECT * FROM hints WHERE crumbID=:crumbID');
+					$dbQuery->execute(['crumbID' => $crumbID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+	
+				$dbRow = $dbQuery->fetch();
+				if ($dbRow) {
+					echo json_encode(["Type" => "Success", "msg" => "Hint returned.", "hint" => $dbRow]);
+				} else {
+					echo json_encode(["Type" => "Error", "msg" => "No hints found with that crumbID."]);
+					http_response_code(500);
+				}
+			}
+		}
+
 		if ($_POST['fn'] == 'getUserQuests') {
 			// Return an object with all the quests created by the user with user_id == $id
 			// Used for quest editor overview
@@ -499,6 +528,52 @@
 			// 
 
 			echo json_encode(["Type" => "Success", "deleted" => "true", "msg" => "Quest Deleted"]);
+		}
+
+		// Complete breadcrumb
+		if ($_POST['fn'] == "completeBreadcrumb") {
+			$crumbID = $_POST['crumbID'];
+			$userID = $_POST['userID'];
+
+			if (empty($crumbID)) {
+				echo json_encode(["Type" => "Error", "msg" => "crumbID is empty."]);
+				http_response_code(400);
+			} else if (empty($userID)) {
+				echo json_encode(["Type" => "Error", "msg" => "userID is empty."]);
+				http_response_code(400);
+			} else {
+				try {
+					$dbQuery = $db->prepare('SELECT * FROM progresses WHERE userID=:userID AND crumbID=:crumbID');
+					$dbQuery->execute(['userID' => $userID, 'crumbID' => $crumbID]);
+				} catch (PDOException $e) {
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+
+				$dbRow = $dbQuery->fetch();
+				if ($dbRow) {
+					try {
+						$dbQuery = $db->prepare('UPDATE progresses SET `completed` = TRUE WHERE userID=:userID AND crumbID=:crumbID');
+						$dbQuery->execute(['userID' => $userID, 'crumbID' => $crumbID]);
+					} catch (PDOException $e) {
+						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+						http_response_code(500);
+						exit;
+					}
+				} else {
+					try {
+						$dbQueryTwo = $db->prepare('INSERT INTO `progresses` (`userID`, `crumbID`, `completed`) VALUES (:userID, :crumbID, TRUE)');
+						$dbQuery->execute(['userID' => $userID, 'crumbID' => $crumbID]);
+					} catch (PDOException $e) {
+						echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+						http_response_code(500);
+						exit;
+					}
+				}
+
+				echo json_encode(["Type" => "Success", "msg" => "Crumb marked as completed.", "crumb" => $dbRow]);
+			}
 		}
 
 
