@@ -103,6 +103,25 @@
 
 		// Get quests
 		if ($_POST['fn'] == 'getQuests') {
+			try {
+				// Check if the email is already in use
+				$dbQuery = $db->prepare('SELECT * FROM quests');
+				$dbQuery->execute();
+			} catch (PDOException $e) {
+				// If it fails, show the error and exit
+				echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+				http_response_code(500);
+				exit;
+			}
+
+			$questsObj;
+			$dbRow = $dbQueryUUID->fetch();
+			while ($dbRow) { // for each row returned, add it to the questsObj
+				$questsObj += $dbRow;
+			}
+			echo json_encode(["Type" => "Success", "msg" => "Quests returned.", "quests" => $questsObj]);
+
+			/*
 			$obj = [
 				[
 					'id' => '1',
@@ -121,17 +140,35 @@
 				]
 			];
 			echo json_encode(["Type" => "Success", "msg" => "Maps Returned", "maps" => $obj]);
+			*/
 		}
 
+		// Get a specific quest
 		if ($_POST['fn'] == 'getQuestDetails') {
 			// Quest details used to view when user is editing them through the quest editor
 
-			$quest_id = $_POST['questId'];
+			$questID = $_POST['questID'];
 
-			// 
-			// Code to fetch quest details
-			// 
+			try {
+				// Check if the email is already in use
+				$dbQuery = $db->prepare('SELECT * FROM quests WHERE questID=:questID');
+				$dbQuery->execute();
+			} catch (PDOException $e) {
+				// If it fails, show the error and exit
+				echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+				http_response_code(500);
+				exit;
+			}
 
+			$dbRow = $dbQueryUUID->fetch();
+			if ($dbRow) {
+				echo json_encode(["Type" => "Success", "msg" => "Quest returned.", "quests" => $dbRow]);
+			} else {
+				echo json_encode(["Type" => "Error", "msg" => "No quests found with that questID."]);
+				http_response_code(500);
+			}
+
+			/*
 			// fn stays as editMap, the rest are set according to fetched data
 			$obj = [
 				'fn' => 'editMap',
@@ -143,6 +180,7 @@
 			];
 
 			echo json_encode(["Type" => "Success", "mapDetails" => $obj]);
+			*/
 		}
 
 		// Login
