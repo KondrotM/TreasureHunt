@@ -206,14 +206,12 @@
 			} else {
 				// Both the username and password have been provided, so carry on...
 
-				// Hash the password before checking it against the database
-				$password = sha1($password);
-
 				// Create a new variable called dbQuery that stores a preparational query to PDO. Once PDO has prepared the query, execute it with the appropriate variables.
 				// https://phpdelusions.net/pdo
+				// https://phpdelusions.net/pdo_examples/password_hash
 				try {
-					$dbQuery = $db->prepare('SELECT * FROM users WHERE username=:username AND hashedPass=:password');
-					$dbQuery->execute([':username' => $username, ':password' => $password]);
+					$dbQuery = $db->prepare('SELECT * FROM users WHERE username=:username');
+					$dbQuery->execute([':username' => $username]);
 				} catch (PDOException $e) {
 					// If it fails, show the error and exit
 					// The strval() function converts the exception type to a string type
@@ -224,22 +222,30 @@
 
 				$dbRow = $dbQuery->fetch();
 				if ($dbRow) {
-					// there is an entry found in the database that matches the username and password,
-					// so store the username in the session cookie
-					$_SESSION['username'] = $username;
-					$_SESSION['userDetails'] = ['userID' => $dbRow['userID'], 'email' => $dbRow['email']];
+					// there is an entry found in the database that matches the username,
+					// so check if the password matches
 
-					// and in an object we're going to send back to the client
-					$obj = [
-						"login" => "true",
-						"id" => strval($dbRow['userID'])
-					];
+					if (password_verify($password, $dbRow['hashedPass'])) {
+						// so store the username in the session cookie
+						$_SESSION['username'] = $username;
+						$_SESSION['userDetails'] = ['userID' => $dbRow['userID'], 'email' => $dbRow['email']];
 
-					// and return a success response with the object we just made
-					echo json_encode(["Type" => "Success", "msg" => $obj]);
-					exit;
+						// and in an object we're going to send back to the client
+						$obj = [
+							"login" => "true",
+							"id" => strval($dbRow['userID'])
+						];
+
+						// and return a success response with the object we just made
+						echo json_encode(["Type" => "Success", "msg" => $obj]);
+						exit;
+					} else {
+						echo json_encode(["Type" => "Error", "msg" => "Incorrect password."]);
+						http_response_code(403);
+						exit;	
+					}
 				} else {
-					echo json_encode(["Type" => "Error", "msg" => "Invalid username or password"]);
+					echo json_encode(["Type" => "Error", "msg" => "Invalid username or password."]);
 					http_response_code(403);
 					exit;
 				}
@@ -622,8 +628,9 @@
 				} else {
 					// email and username not currently in use, so carry on
 
-					// Hash the password with sha1 before storing it
-					$password = sha1($password);
+					// Hash the password before storing it
+					// https://www.php.net/manual/en/function.password-hash.php
+					$password = password_hash($password, "PASSWORD_DEFAULT");
 					
 					// if we got to this point, both the password fields match and the email and pass aren't already in use, so make the new account entry in the database
 					try {
