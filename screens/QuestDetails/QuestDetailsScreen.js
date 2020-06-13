@@ -22,6 +22,13 @@ function QuestDetailsScreen( {navigation} ){
 		completedCrumbs: ''
 	})
 
+	function playQuest() {
+		if (questDetails.completedCrumbs >= questDetails.totalCrumbs) { 
+			console.log('Quest already completed!');
+		} else {
+			navigation.navigate('Quest',{questId: route.params.id, lat: questDetails.lat, lng: questDetails.lng});
+		}
+	}
 
 
 	const route = useRoute();
@@ -75,7 +82,7 @@ function QuestDetailsScreen( {navigation} ){
 
         {/*<FontAwesomeIcon size = {150} icon={ faMap } />*/}
         <View style={{flex: 1, justifyContent: 'flex-end', marginBottom: 20}}>
-        <Button title='Play Quest' onPress={() => {navigation.navigate('Quest',{questId: route.params.id})}} />
+        <Button title='Play Quest' onPress={() => playQuest()} />
         </View>
       </ScrollView>
     );

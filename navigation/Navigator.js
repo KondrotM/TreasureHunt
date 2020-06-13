@@ -58,7 +58,7 @@ const MainTabs = createBottomTabNavigator();
 global.id = '13';
 
 export default function BottomTabNavigator({ navigation }){
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const route = useRoute();
