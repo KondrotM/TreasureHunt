@@ -676,8 +676,8 @@
 				// https://phpdelusions.net/pdo
 				try {
 					// Check if the email is already in use
-					$dbQuery = $db->prepare('SELECT * FROM users WHERE email=:email');
-					$dbQuery->execute(['email' => $email]);
+					$dbQuery = $db->prepare('SELECT * FROM users WHERE email=:email OR username=:username');
+					$dbQuery->execute(['email' => $email, 'username' => $username]);
 				} catch (PDOException $e) {
 					// If it fails, show the error and exit
 					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
