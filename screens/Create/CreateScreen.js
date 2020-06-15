@@ -71,6 +71,8 @@ function CreateScreen({ navigation }) {
 
 
 	useEffect(() => {
+		// Fetches quest details and sets the fields to their respective values
+		// This is done only if the 'edit' parameter is passed upon screen navigation
 		if (route.params.mode == 'Edit') {
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',

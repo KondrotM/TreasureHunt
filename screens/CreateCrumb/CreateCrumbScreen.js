@@ -8,7 +8,7 @@ import MapView, { Marker } from 'react-native-maps';
 
 
 function sendBreadcrumb( request ){
-	console.log(request);
+	// function to send breadcrumb to API, it will record it in the database
 	fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 	  method: 'POST',
 	  headers: {
@@ -49,8 +49,6 @@ function CreateCrumbScreen({ navigation }) {
 	// route used for passing variables between screen navigation
 	const route = useRoute();
 
-	console.log(route.params.quest);
-	// console.log(crumbDetails);
 
 	// useeffect used done on page loads, allows for updating of variables without infinite loops
 	// right now the lat and lon are one selection behind what the user selects, since the values are taken by the page before they are updated
@@ -61,7 +59,6 @@ function CreateCrumbScreen({ navigation }) {
 	useEffect(() => {
 		crumbDetails['lat'] = route.params.quest.lat - 0.01;
 		crumbDetails['lng'] = route.params.quest.lng;
-		// setCrumbDetails({...crumbDetails, lat : , lng : route.params.quest.lng});
 	});
 
 	return (
