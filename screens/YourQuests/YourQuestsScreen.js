@@ -47,7 +47,7 @@ function PlayScreen({ navigation, questsToShow }){
 
 	// asynchronous function which updates questsList on response, mk
 	function getQuests(){
-		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -57,7 +57,7 @@ function PlayScreen({ navigation, questsToShow }){
 		}).then(
 		(response) => response.json()
 		).then(
-		(json) => setQuestsList(json.maps)
+		(json) => setQuestsList(json.quests)
 		);
 	};
 
@@ -74,11 +74,20 @@ function PlayScreen({ navigation, questsToShow }){
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
 		{/* Embedded react js code essentially acting as a for loop */}
-			{questsList.map((questInfo) => {
+		{questsList ? (
+			<>
+
+			{ questsList.map((questInfo) => {
 				return (
 					<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
 				);
-			})}
+			}) }
+
+			</>
+
+			) : (<> 
+			<Text> No quests to show </Text>
+			</> ) }
 			</ScrollView>
 			</View>
 			<Button title='Create new Quest' color='#56B09C' onPress={() => (navigation.navigate('Create Quest', {mode: 'Create'}))} />

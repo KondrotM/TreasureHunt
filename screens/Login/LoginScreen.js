@@ -7,7 +7,7 @@ import { NavigationScreenProps } from 'react-navigation';
 // import Navigator from '../../navigation/Navigator';
 
 function requestLogin( request, navigation ) {
-    fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+    fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

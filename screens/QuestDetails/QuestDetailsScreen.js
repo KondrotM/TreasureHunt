@@ -34,7 +34,7 @@ function QuestDetailsScreen( {navigation} ){
 	const route = useRoute();
 
 	useEffect(() => {
-		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'

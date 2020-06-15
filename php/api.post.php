@@ -25,7 +25,7 @@
 			$description = $_POST["description"];
 			$latitude = $_POST["lat"];
 			$longitude = $_POST["lng"];
-			$userID = $_POST["userID"];
+			$userID = $_POST["userId"];
 
 			// Check if any of the required inputs are empty and respond with an error if they are
 			if (empty($mapName) | empty($difficulty) | empty($description) | empty($latitude) | empty($longitude) | empty($userID)) {
@@ -273,7 +273,7 @@
 			echo json_encode(["Type" => "Success", "msg" => "Map Details Updated"]);
 		}
 
-				if ($_POST['fn'] == 'getCrumbDetails') {
+		if ($_POST['fn'] == 'getCrumbDetails') {
 			$quest_id = $_POST['questId'];
 			$user_id = $_POST['userId'];
 
@@ -297,11 +297,11 @@
 				'crumbPos' => 3,
 				'totalCrumbs' => 6,
 				// lat and lng of crumb
-				'lat' => 43.125,
-				'lng' => 2.512
+				'lat' => 52.91983,
+				'lng' => -1.1986
 			];
 
-					echo json_encode(["Type" => "Success", "details" => $obj]);
+			echo json_encode(["Type" => "Success", "details" => $obj]);
 		}
 
 		if ($_POST['fn'] == 'completeCrumb') {

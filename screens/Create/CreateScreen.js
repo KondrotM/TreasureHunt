@@ -18,13 +18,13 @@ function CreateScreen({ navigation }) {
 		// body is manually strung together because nothing else worked
 		// https://reactnative.dev/docs/network
 		// https://stackoverflow.com/a/44044190/13095638
-		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
 		  method: 'POST',
 		  headers: {
 		    'Content-Type': 'application/x-www-form-urlencoded'
 		  },
 		  body: "fn=" + request.fn +
-		  		"&mapName=" + request.name +
+		  		"&mapName=" + request.mapName +
 		  		"&difficulty=" + request.difficulty +
 		  		"&description=" + request.description + 
 		  		"&lat=" + request.lat +
@@ -41,12 +41,13 @@ function CreateScreen({ navigation }) {
 	// https://reactjs.org/docs/hooks-intro.html
 	// https://stackoverflow.com/a/54150873/13095638
 	const [mapDetails, setMapDetails] = useState({
-		fn: 'createMap',
+		fn: 'createQuest',
 		lat: 'None',
 		lng: 'None',
-		difficulty: '',
+		difficulty: 'easy',
 		description: '',
-		name: ''
+		questName: '',
+		userID: global.id
 	});
 
 	// route used for passing variables between screen navigation
@@ -96,8 +97,8 @@ function CreateScreen({ navigation }) {
 			<Text style={styles.heading}>Map Name:</Text>
 			<TextInput style={styles.textInput}
 				placeholder='Tap here to enter the quest name'
-				value={mapDetails.name}
-				onChangeText={val => setMapDetails({...mapDetails, name: val})}
+				value={mapDetails.mapName}
+				onChangeText={val => setMapDetails({...mapDetails, mapName: val})}
 			/>
 
 			<Text style={styles.heading}>Map Description</Text>
@@ -117,9 +118,9 @@ function CreateScreen({ navigation }) {
 				onValueChange={(itemValue, itemIndex) =>
 					setMapDetails({...mapDetails, difficulty: itemValue})
 				}>
-				<Picker.Item label="Beginner" value="beginner" />
-				<Picker.Item label="Intermediate" value="intermediate" />
-				<Picker.Item label="Difficult" value="difficult" />
+				<Picker.Item label="Easy" value="easy" />
+				<Picker.Item label="Medium" value="medium" />
+				<Picker.Item label="Hard" value="hardx" />
 			</Picker>
 
 			<Text style={styles.heading}>Initial Co-ordinates:</Text>

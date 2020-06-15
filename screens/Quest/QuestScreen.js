@@ -14,7 +14,7 @@ function QuestScreen({navigation}){
 
 	function getCrumbDetails() {
 		console.log('what');
-		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -54,6 +54,7 @@ function QuestScreen({navigation}){
 	  } else if (location) {
 	    lat = location.coords.latitude;
 	    lng = location.coords.longitude;
+	  // console.log(lat,lng);
 	}
 
 
@@ -76,13 +77,16 @@ function QuestScreen({navigation}){
 
 	const [guess, setGuess] = useState('')
 
+	const tempLat = 52.92;
+	const tempLng = -1.1989;
+
 	function viewRiddle() {
-		var diffLat = lat - playQuest.lat;
-		var diffLng = lng - playQuest.lng;
+		var diffLat = tempLat - playQuest.lat;
+		var diffLng = tempLng - playQuest.lng;
 
 		var dist = Math.pow(diffLat, 2) + Math.pow(diffLng, 2);
 
-		if (dist < 0.001){
+		if (dist < 0.000001){
 			alert(playQuest.riddle);
 		} else {
 			alert('Get closer to the breadcrumb location!');
@@ -90,7 +94,7 @@ function QuestScreen({navigation}){
 	}
 
 	function completeCrumb() {
-		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
@@ -101,23 +105,32 @@ function QuestScreen({navigation}){
 		}).then(
 		(response) => response.json()
 		).then(
-		(json) => setPlayQuest(json.details)
+		(json) => handleCompletion(json.details)
 		);
+	}
+
+	function handleCompletion(details) {
+		setPlayQuest(details);
+
+		console.log(playQuest.crumbPos, playQuest.totalCrumbs);
+		console.log((playQuest.crumbPos >= playQuest.totalCrumbs));
+	
+		if (playQuest.crumbPos >= playQuest.totalCrumbs) { 
+			alert('Quest completed, congratulations!');
+			navigation.navigate('Play');
+		}
+
 	}
 
 	function correctAnswer() {
 		completeCrumb();
 		alert('Correct Answer!');
-
-		if (playQuest.crumbPos > playQuest.totalCrumbs) { 
-			alert('Quest completed, congratulations!');
-			navigation.navigate('Play');
-		}
 	}
 
 	function giveUpCrumb() {
 		completeCrumb();
 		alert('Crumb given up');
+
 	}
 
 	function answerRiddle() {
@@ -191,14 +204,14 @@ function QuestScreen({navigation}){
 					longitude: route.params.lng,
 
 					// The deltas are used for the zoom level.
-					latitudeDelta: 1,
-					longitudeDelta: 1,
+					latitudeDelta: 0.05,
+					longitudeDelta: 0.05,
 				}}
 				style={styles.map}
 				customMapStyle={customMapStyle}
 			>
 			<MapView.Marker
-            coordinate={{latitude: lat, longitude: lng}} 
+            coordinate={{latitude: tempLat, longitude: tempLng}} 
             pinColor='tan'
             />
             <MapView.Marker

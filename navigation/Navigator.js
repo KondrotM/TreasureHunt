@@ -12,6 +12,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createSwitchNavigator} from 'react-navigation';
 import { useRoute } from '@react-navigation/native'
 
+import { FontAwesome } from '@expo/vector-icons';
 // const HomeStack = createStackNavigator()
 
 // function myStack() {
@@ -98,21 +99,40 @@ export default function BottomTabNavigator({ navigation }){
                 activeBackgroundColor: '#caf7e2', 
                 inactiveBackgroundColor: '#caf7e2'
             }}>
+
 			{isLoggedIn ? (
 				<>
 				<MainTabs.Screen
 				name = "Play"
 				component={PlayScreen}
+				options = {{
+					tabBarLabel: 'Play',
+					tabBarIcon: ({ color, size }) => (
+						<FontAwesome name="map" color={color} size={size} />
+				),
+				}}
 				/>
 
 				<MainTabs.Screen
 				name = "Create"
 				component={YourQuestsScreen}
+				options = {{
+					tabBarLabel: 'Create',
+					tabBarIcon: ({ color, size }) => (
+						<FontAwesome name="pencil-square" color={color} size={size} />
+				),
+				}}
 				/>
 
 				<MainTabs.Screen
 				name="Social"
 				component={SocialScreen}
+				options = {{
+					tabBarLabel: 'Social',
+					tabBarIcon: ({ color, size }) => (
+						<FontAwesome name="user" color={color} size={size} />
+				),
+				}}
 				/>
 				</>
 				) : (

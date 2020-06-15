@@ -312,8 +312,7 @@ export default class App extends Component {
             tabBarOptions={{
                 activeTintColor: '#000', inactiveTintColor: '#777', activeBackgroundColor: '#caf7e2', inactiveBackgroundColor: '#caf7e2'
             }}
-
-          // Icons
+            
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;

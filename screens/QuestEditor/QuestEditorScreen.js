@@ -68,12 +68,13 @@ function QuestEditorScreen({ navigation, questsToShow }){
 
 	// asynchronous function which updates questsList on response, mk
 	function getQuestEditorDetails(){
-		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		fetch('https://thenathanists.uogs.co.uk/api.demo.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: 'fn=getQuestCrumbs'
+			body: 'fn=getQuestCrumbs' + 
+				'&questId=' + route.params.questId
 		}).then(
 		(response) => response.json()
 		).then(
@@ -130,12 +131,22 @@ function QuestEditorScreen({ navigation, questsToShow }){
 			<Text style={styles.titleText}> Quest Breadcrumbs </Text>
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
-		{/* Embedded react js code essentially acting as a for loop */}
-			{crumbsList.map((questInfo) => {
+
+			{crumbsList ? (
+			<>
+
+			{ crumbsList.map((questInfo) => {
 				return (
 					<QuestBox title={questInfo.name} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
 				);
-			})}
+			}) }
+
+			</>
+
+			) : (<> 
+			<Text style={{alignSelf:'center'}}> No breadcrumbs to show </Text>
+			</> ) }
+		{/* Embedded react js code essentially acting as a for loop */}
 			</ScrollView>
 			</View>
 			<View style={{marginBottom: 10}}>
