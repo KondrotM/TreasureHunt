@@ -11,6 +11,8 @@ import MapView, { Marker } from 'react-native-maps';
 
 function QuestDetailsScreen( {navigation} ){
 
+
+	// usestate holding quest details to display, all empty until they are fetched from the API
 	const [questDetails, setQuestDetails] = useState({
 		name: '',
 		id: '',
@@ -22,6 +24,7 @@ function QuestDetailsScreen( {navigation} ){
 		completedCrumbs: ''
 	})
 
+	// initiates quest if it is not already completed
 	function playQuest() {
 		if (questDetails.completedCrumbs >= questDetails.totalCrumbs) { 
 			console.log('Quest already completed!');
@@ -33,6 +36,7 @@ function QuestDetailsScreen( {navigation} ){
 
 	const route = useRoute();
 
+	// fetches the quest completion state based on user id
 	useEffect(() => {
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
@@ -47,8 +51,8 @@ function QuestDetailsScreen( {navigation} ){
 	responseJson) => setQuestDetails(responseJson.questDetails)
 	)},[]);
 
-	console.log(route);
     return (
+    	// page markup
       <ScrollView contentContainerStyle={styles.container}>
 		<Text style={styles.titleText}> {questDetails.name}</Text>
 		<Text style={styles.subText}> {questDetails.difficulty} Quest</Text>

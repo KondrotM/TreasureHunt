@@ -2,14 +2,8 @@ import styles from './styles';
 import React, { Component, useState } from 'react';
 import { Text, TextInput, View, Button} from 'react-native';
 
-// function RegisterScreen(){
-//     return (
-//       <View style={styles.container}>
-//         <Text>This is the RegisterScreen.</Text>
-//       </View>
-//     );
-//   }
 
+// sends registration request and alerts response message
 function requestRegister( request ) {
     fetch('https://thenathanists.uogs.co.uk/api.post.php', {
         method: 'POST',
@@ -25,6 +19,7 @@ function requestRegister( request ) {
 
 function RegisterScreen(){
 
+    // usestate which holds registration details
     const [registerDetails, setRegisterDetails] = useState({
         fn: 'register',
         username: '',
@@ -34,7 +29,7 @@ function RegisterScreen(){
 
 
 	return (
-		// <ScrollView contentContainerStyle={styles.container}>
+      // page markup
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <Text style={styles.heading}>Username:</Text>
@@ -65,4 +60,4 @@ function RegisterScreen(){
       // </ScrollView>
 	  );
   }
-export default RegisterScreen; // e.g. DetailScreen
+export default RegisterScreen; 

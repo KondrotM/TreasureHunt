@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Blank Template",
-    "slug": "blankTesting",
+    "name": "Treasure Hunt",
+    "slug": "treasurehunt",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -27,6 +27,7 @@
     "ios": {
       "supportsTablet": true,
       "userInterfaceStyle": "dark"
-    }
+    },
+    "description": "CT5017 Solution by Matej K and Oscar N"
   }
 }

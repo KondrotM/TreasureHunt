@@ -13,4 +13,4 @@ function SocialScreen(){
     );
   }
 
-export default SocialScreen; // e.g. DetailScreen
+export default SocialScreen;

@@ -51,6 +51,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 
 	const route = useRoute();
 
+	// default details used by the quest editor
 	const [questDetails, setQuestDetails] = useState({
 		id: '',
 		name: '',
@@ -62,12 +63,12 @@ function QuestEditorScreen({ navigation, questsToShow }){
 	});
 
 
-	// State hook which holds quest information, mk
+	// State hook which holds quest information
 	const [crumbsList, setCrumbsList] = useState([
 		]);
 
 
-	// asynchronous function which updates questsList on response, mk
+	// asynchronous function which updates questsList on response
 	function getQuestEditorDetails(){
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
@@ -83,6 +84,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 		);
 	};
 
+	// function sends delete breadcrumb request to api
 	function deleteCrumb(crumbId){
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
@@ -99,6 +101,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 		);
 	};
 
+	// function sends request to delete the whole quest
 	function deleteQuest(questId) {
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
@@ -114,6 +117,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 		);
 	};
 
+	// handles quest deletion response
 	function handleDeleteQuest(msg) {
 		alert(msg);
 		navigation.navigate('Create');
@@ -127,6 +131,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 
 
 	return (
+		// page markup
 		<View style={styles.container}>
 			<View style = {styles.formContainer}>
 			<Text style={styles.titleText}> Quest Breadcrumbs </Text>
@@ -153,7 +158,7 @@ function QuestEditorScreen({ navigation, questsToShow }){
 			<Button title='Create new Breadcrumb' color='#56B09C' onPress={() => (navigation.navigate('Create Breadcrumb', {quest : questDetails}))} />
 			</View>
 			<View style={{marginBottom: 10}}>
-			<Button title='Edit Quest Details' color='#56B09C' onPress={() => (navigation.navigate('Create Quest', {mode : 'Edit'}))} />
+			<Button title='Edit Quest Details' color='#56B09C' onPress={() => (navigation.navigate('Create Quest', {mode : 'Edit', id: questDetails.id}))} />
 			</View>
 			<View style={{marginBottom: 10}}>
 			<Button title='Delete Quest' color='#386150' onPress={() => (Alert.alert('Are you sure?','Are you sure you want to delete this quest?',

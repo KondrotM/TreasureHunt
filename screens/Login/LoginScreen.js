@@ -2,10 +2,9 @@ import styles from './styles';
 import React, { Component, useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
-// import { Icon } from 'react-native-elements';
 
-// import Navigator from '../../navigation/Navigator';
 
+// function sends login request to the API
 function requestLogin( request, navigation ) {
     fetch('https://thenathanists.uogs.co.uk/api.post.php', {
         method: 'POST',
@@ -18,6 +17,7 @@ function requestLogin( request, navigation ) {
         }).then((response) => response.json()).then((responseJson) => handleLogin(responseJson, navigation));
     }
 
+// function to handle respose from API
 function handleLogin( response, navigation ) {
     console.log(response);
     if (response.msg.login == 'true') {
@@ -27,12 +27,16 @@ function handleLogin( response, navigation ) {
     }
 }
 
+
 function LoginScreen({ navigation }) {
+  // react hook holding login details
     const [loginDetails, setLoginDetails] = useState({
         fn: 'login',
         username: '',
         password: '',
     });
+
+    // page markup
 	return ( 
       <View style={styles.container}>
       	<View style={styles.formContainer}>
@@ -57,22 +61,4 @@ function LoginScreen({ navigation }) {
 }
 
 
-
-
-// class LoginScreen extends Component {
-// 	static navigationOptions = ({ navigation }: NavigationScreenProps) => ({
-// 		headerTitle: "Home",
-// 		headerLeft: <Button name='md-menu' onPress={() => navigation.toggleDrawer()}
-// 		/>
-// 	});
-//   render() {
-//     return (
-//       <View style={styles.container}>
-//         <Text>This is the LoginScreen.</Text>
-//         <Button title="Login" onPress={() => navigation.navigate('Social')}> </Button>
-//       </View>
-//     );
-//   }
-// }
-
-export default LoginScreen; // e.g. DetailScreen
+export default LoginScreen;

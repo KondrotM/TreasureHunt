@@ -13,6 +13,7 @@ import { StackNavigator } from 'react-navigation';
 
 
 function QuestBox({navigation, title, diff, id}) {
+	// quest box returns stylised 'TouchableHighlight' which holds quest info 
 	return (
 		<TouchableHighlight 
 			style={styles.questBox} 
@@ -39,12 +40,12 @@ function QuestBox({navigation, title, diff, id}) {
 
 function PlayScreen({ navigation, questsToShow }){
 
-	// State hook which holds quest information, mk
+	// State hook which holds quest information
 	const [questsList, setQuestsList] = useState([
 		]);
 
 
-	// asynchronous function which updates questsList on response, mk
+	// asynchronous function which updates questsList on response
 	function getQuests(){
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
@@ -80,7 +81,7 @@ function PlayScreen({ navigation, questsToShow }){
 			<ScrollView style={styles.scrollView}>
 			{/*<QuestBox diff='Easy' title='Fix this' id='2' navigation={navigation}/>*/}
 			{/* Embedded react js code essentially acting as a for 	loop */}
-			{/* '?' statement checks if questsList is empty or not */}
+			{/* switch statement checks if questsList is empty or not */}
 			{questsList ? (
 			<>
 
@@ -94,7 +95,7 @@ function PlayScreen({ navigation, questsToShow }){
 
 			) : (
 			<> 
-			<Text> No quests to show </Text>
+			<Text style={{alignSelf: "center"}}> No quests to show </Text>
 			</> ) }
 			</ScrollView>
 			</View>

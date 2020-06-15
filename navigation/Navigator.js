@@ -26,7 +26,7 @@ global.id = '1';
 export default function BottomTabNavigator({ navigation }){
 	// isLoggedIn toggles which navigation screen is shown
 	// (Logged in / Logged out)
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const route = useRoute();
