@@ -1,0 +1,22 @@
+createQuest(mapName, difficulty, description, lat, lng, userID) -> msg: "Quest created."
+
+getQuests() -> msg: "Quests returned.", quests: [{"questID": "4", "difficulty": "0"...}]
+
+getQuestDetails(questID) -> msg: "Quest returned.", quests: {"questID": "4", "difficulty": "0"...}
+
+login(username, password) -> msg: {"login": "true", "id": "1"}
+
+register(username, password, email) -> msg: "Account registered"
+
+createCrumb(questID, order, hints) -> created: "true", msg: "Breadcrumb created."
+
+getHint(crumbID) -> msg: "Hint returned.", hint: {"crumbID": "0", "hint": "foo"...}
+
+getUserQuests(userID) -> msg: "Quests returned.", quests: [{"questID": "4", "difficulty": "0"...}]
+
+getCrumbData(crumbID) -> msg: "Crumb returned.", crumb: {"crumbID": "0", "hint": "foo"...}
+
+getQuestCrumbs(questID) -> msg: "Crumbs returned.", crumb: [{"crumbID": "0", "hint": "foo"...}]
+
+completeCrumb(crumbID, userID) -> msg: "Crumb marked as completed.", crumb: {"crumbID": "0", "hint": "foo"...}
+

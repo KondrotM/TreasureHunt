@@ -253,91 +253,46 @@
 			}
 		}
 
-		if ($_POST['fn'] == 'editMap') {
-			$quest_id = $_POST['questId'];
-
-			// 
-			// Find quest
-			// 
-
-			$map_name = $_POST['mapName'];
+		if ($_POST['fn'] == 'editQuest') {
+			$questID = $_POST['questID'];
 			$difficulty = $_POST['difficulty'];
+			$mapName = $_POST['mapName'];
 			$description = $_POST['description'];
-			$lat = $_POST['lat'];
-			$lng = $_POST['lng'];
 
-			// 
-			// Update map details
-			// 
+			if (empty($questID)) {
+				echo json_encode(["Type" => "Error", "msg" => "questID is empty."]);
+				http_response_code(400);
+			} else if (empty($difficulty)) {
+				echo json_encode(["Type" => "Error", "msg" => "difficulty is empty."]);
+				http_response_code(400);
+			} else if (empty($mapName)) {
+				echo json_encode(["Type" => "Error", "msg" => "mapName is empty."]);
+				http_response_code(400);
+			} else if (empty($description)) {
+				// Update all values except description
+				try {
+					$dbQuery = $db->prepare('UPDATE quests SET difficulty=:difficulty, mapName=:mapName WHERE `quests`.`questID`=:questID');
+					$dbQuery->execute(['questID' => $questID, 'difficulty' => $difficulty, 'mapName' => $mapName, 'descr' => $description]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+			} else {
+				// Update all values
+				try {
+					$dbQuery = $db->prepare('UPDATE quests SET difficulty=:difficulty, mapName=:mapName, `description`=:descr WHERE `quests`.`questID`=:questID');
+					$dbQuery->execute(['questID' => $questID, 'difficulty' => $difficulty, 'mapName' => $mapName, 'descr' => $description]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
 
-			echo json_encode(["Type" => "Success", "msg" => "Map Details Updated"]);
-		}
-
-		if ($_POST['fn'] == 'getCrumbDetails') {
-			$quest_id = $_POST['questId'];
-			$user_id = $_POST['userId'];
-
-			// 
-			// Find the first not-completed crumb by user for specified quest
-			// 
-
-			// 
-			// Return crumb details
-			// 
-
-			$obj = [
-				'questId' => 2,
-				'crumbId' => 3,
-				'questName' => 'Getting Around',
-				'crumbName' => 'Down the Road',
-				'riddle' => 'Here is a riddle',
-				'hint' => 'Riddle hint',
-				'answer' => 'Ans',
-				'difficulty' => 'easy',
-				'crumbPos' => 3,
-				'totalCrumbs' => 6,
-				// lat and lng of crumb
-				'lat' => 43.125,
-				'lng' => 2.512
-			];
-
-					echo json_encode(["Type" => "Success", "details" => $obj]);
-		}
-
-		if ($_POST['fn'] == 'completeCrumb') {
-			$crumb_id = $_POST['crumbId'];
-			$user_id = $_POST['userId'];
-
-			// 
-			// Set the crumb as complete
-			// 
-
-			// 
-			// Get the next crumb details and return them
-			// 
-
-			// 
-			// If the player completed the last crumb in the quest, return +1
-			// so then the completion will say 7/6, i'll further handle the quest being completed react-side
-			// 
-
-			$obj = [
-				'questId' => 2,
-				'crumbId' => 5,
-				'questName' => 'Getting Around',
-				'crumbName' => "Bag's in the river",
-				'riddle' => 'Here is a riddle',
-				'hint' => 'Riddle hint',
-				'answer' => 'Ans',
-				'difficulty' => 'easy',
-				'crumbPos' => 4,
-				'totalCrumbs' => 6,
-				// lat and lng of crumb
-				'lat' => 43.125,
-				'lng' => 2.512
-			];
-
-			echo json_encode(["Type" => "Success", "details" => $obj]);
+				echo json_encode(["Type" => "Success", "msg" => "Quest details updated."]);
+			}
 		}
 
 		// Create a new crumb
@@ -504,12 +459,12 @@
 					exit;
 				}
 	
-				$crumbsObj;
-				$dbRow = $dbQuery->fetch();
-				while ($dbRow) { // for each row returned, add it to the crumbsObj
-					$crumbsObj += $dbRow;
-				}
-				echo json_encode(["Type" => "Success", "msg" => "Crumbs returned.", "crumbs" => $crumbsObj]);
+				$crumbsObj = $dbQuery->fetchAll();
+				$output = str_replace(array("\r\n", "\n", "\r"),'',$crumbsObj);
+				$jsonEncode = json_encode(["Type" => "Success", "msg" => "Crumbs returned.", "crumbs" => $output]);
+				$output_json = preg_replace("!\r?\n!","", $jsonEncode);
+				echo $output_json;
+				exit;
 			}
 
 
@@ -536,30 +491,45 @@
 
 		if ($_POST['fn'] == 'deleteCrumb') {
 			// User request to delete a breadcrumb
-			$crumb_id = $_POST['crumbId'];
-			$quest_id = $_POST['questId'];
+			$crumbID = $_POST['crumbID'];
+			$questID = $_POST['questID'];
 
-			// 
-			// Code to delete crumb
-			// 
+			if (empty($questID)) {
+				echo json_encode(["Type" => "Error", "msg" => "questID is empty."]);
+				http_response_code(400);
+			} else if (empty($crumbID)) {
+				echo json_encode(["Type" => "Error", "msg" => "crumbID is empty."]);
+				http_response_code(400);
+			} else {
+				// first delete the crumb from the table
+				try {
+					$dbQuery = $db->prepare('DELETE FROM crumbs WHERE questID=:questID AND crumbID=:crumbID');
+					$dbQuery->execute(['questID' => $questID, 'crumbID' => $crumbID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
 
-			// 
-			// Get new list of breadcrumbs still in quest
-			// 
-
-			$obj = [
-				[
-					'id' => '1',
-					'name' => 'Go to the hills'
-				],
-				[
-					'id' => '3',
-					'name' => 'Through the forest'
-				]
-			];
-
-			echo json_encode(["Type" => "Success", "deleted" => "true", "msg" => "Crumb Deleted", "crumbs" => $obj]);
-
+				// now return the rest of the crumbs
+				try {
+					$dbQuery = $db->prepare('SELECT * FROM crumbs WHERE questID=:questID');
+					$dbQuery->execute(['questID' => $questID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
+				
+				$crumbsObj = $dbQuery->fetchAll();
+				$output = str_replace(array("\r\n", "\n", "\r"),'',$crumbsObj);
+				$jsonEncode = json_encode(["Type" => "Success", "msg" => "Crumb deleted.", "crumbs" => $output]);
+				$output_json = preg_replace("!\r?\n!","", $jsonEncode);
+				echo $output_json;
+				exit;
+			}
 		}
 
 		if ($_POST['fn'] == 'getQuestOverview') {
@@ -594,17 +564,31 @@
 		}	
 
 		if ($_POST['fn'] == 'deleteQuest') {
-			$quest_id = $_POST['questId'];
+			// User request to delete a quest
+			$questID = $_POST['questID'];
 
-			// 
-			// Code to delete quest
-			// 
+			if (empty($questID)) {
+				echo json_encode(["Type" => "Error", "msg" => "questID is empty."]);
+				http_response_code(400);
+			} else {
+				// first delete the crumb from the table
+				try {
+					$dbQuery = $db->prepare('DELETE FROM quests WHERE questID=:questID');
+					$dbQuery->execute(['questID' => $questID]);
+				} catch (PDOException $e) {
+					// If it fails, show the error and exit
+					echo json_encode(["Type" => "Error", "msg" => strval($e)]);
+					http_response_code(500);
+					exit;
+				}
 
-			echo json_encode(["Type" => "Success", "deleted" => "true", "msg" => "Quest Deleted"]);
+				echo json_encode(["Type" => "Success", "deleted" => "true", "msg" => "Quest deleted."]);
+				exit;
+			}
 		}
 
 		// Complete breadcrumb
-		if ($_POST['fn'] == "completeBreadcrumb") {
+		if ($_POST['fn'] == "completeCrumb") {
 			$crumbID = $_POST['crumbID'];
 			$userID = $_POST['userID'];
 
