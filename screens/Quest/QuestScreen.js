@@ -25,13 +25,19 @@ function QuestScreen({navigation}){
 			}).then(
 				(response) => response.json()
 			).then(
-				(json) => setPlayQuest(json.details)
+				(json) => handleCrumbData(json.details)
 			).catch(
 				(error) => {
 					console.error('Error:', error);
 					alert(error);
 				}
 			);
+	}
+
+	function handleCrumbData(details) {
+		if (details) {
+			setPlayQuest(details);
+		}
 	}
 
 	useEffect(() => {
