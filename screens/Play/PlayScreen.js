@@ -53,9 +53,15 @@ function PlayScreen({ navigation, questsToShow }){
 			},
 			body: 'fn=getQuests'
 		}).then(
-		(response) => response.json()
+			(response) => response.json()
 		).then(
-		(json) => setQuestsList(json.quests)
+			(json) => {
+				try {
+					setQuestsList(json.quests)
+				} catch(e) {
+					console.log("No quests found");
+				}
+			}
 		);
 	};
 
@@ -72,7 +78,7 @@ function PlayScreen({ navigation, questsToShow }){
 			<Text style={styles.titleText}> Quest Selection </Text>
 			<View style={{height: 450, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
-			<QuestBox diff='Easy' title='Fix this' id='2' navigation={navigation}/>
+			{/*<QuestBox diff='Easy' title='Fix this' id='2' navigation={navigation}/>*/}
 			{/* Embedded react js code essentially acting as a for 	loop */}
 			{/* '?' statement checks if questsList is empty or not */}
 			{questsList ? (
