@@ -44,12 +44,19 @@ function QuestDetailsScreen( {navigation} ){
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			body: 'fn=getQuestOverview' + 
-				'&questId=' + route.params.questId + 
-				'&userId=' + global.id
-	}).then((response) => 
-	response.json()).then((
-	responseJson) => setQuestDetails(responseJson.questDetails)
-	)},[]);
+				'&questID=' + route.params.questId + 
+				'&userID=' + global.id
+		}).then(
+			(response) => response.json())
+		.then(
+			(responseJson) => setQuestDetails(responseJson.questDetails)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
+		)
+	},[]);
 
     return (
     	// page markup

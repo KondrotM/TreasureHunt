@@ -12,48 +12,57 @@ function QuestScreen({navigation}){
 	
 	const route = useRoute();
 
-	function getCrumbDetails() {
+	function getCrumbData() {
 		// function sends a post request to get the specific crumb details to show on the screen
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: "fn=getCrumbDetails" + 
-				"&questId=" + route.params.questId +
-				"&userId=" + global.id
-			}).then((response) => response.json()).then((json) => setPlayQuest(json.details));
+			body: "fn=getCrumbData" + 
+				"&questID=" + route.params.questId +
+				"&userID=" + global.id
+			}).then(
+				(response) => response.json()
+			).then(
+				(json) => setPlayQuest(json.details)
+			).catch(
+				(error) => {
+					console.error('Error:', error);
+					alert(error);
+				}
+			);
 	}
 
 	useEffect(() => {
 		// Effect to get crumb details on page load
-		getCrumbDetails();
+		getCrumbData();
 	}, [])
 
-		// Geolocation usage from https://heartbeat.fritz.ai/how-to-use-the-geolocation-api-in-a-react-native-app-b5e611b00a0c
+	// Geolocation usage from https://heartbeat.fritz.ai/how-to-use-the-geolocation-api-in-a-react-native-app-b5e611b00a0c
 	const [location, setLocation] = useState(null);
 	const [errorMsg, setErrorMsg] = useState(null);
 
 
 	useEffect(() => {
 	    (async () => {
-	      let { status } = await Location.requestPermissionsAsync();
-	      if (status !== 'granted') {
-	        setErrorMsg('Permission to access location was denied');
-	      }
+	    	let { status } = await Location.requestPermissionsAsync();
+		    if (status !== 'granted') {
+		        setErrorMsg('Permission to access location was denied');
+	      	}
 
-	      let location = await Location.getCurrentPositionAsync({});
-	      setLocation(location);
+	      	let location = await Location.getCurrentPositionAsync({});
+	      	setLocation(location);
 	    })();
-	  });
+	});
 
-	  let text = 'Waiting..';
-	  let lat = 0;
-	  let lng = 0;
+	let text = 'Waiting..';
+	let lat = 0;
+	let lng = 0;
 
-	  if (errorMsg) {
+	if (errorMsg) {
 	    text = errorMsg;
-	  } else if (location) {
+	} else if (location) {
 	    lat = location.coords.latitude;
 	    lng = location.coords.longitude;
 	}
@@ -63,8 +72,8 @@ function QuestScreen({navigation}){
 
 	// Variable containing all the necessary details for a full crumb view
 	const [playQuest, setPlayQuest] = useState({
-		questId: '2',
-		crumbId: '1',
+		questID: '2',
+		crumbID: '1',
 		questName: '',
 		crumbName: '',
 		riddle: '',
@@ -103,12 +112,17 @@ function QuestScreen({navigation}){
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			body: 'fn=completeCrumb' + 
-			'&crumbId=' + playQuest.crumbId + 
-			'&userId=' + global.id
+			'&crumbID=' + playQuest.crumbID + 
+			'&userID=' + global.id
 		}).then(
-		(response) => response.json()
+			(response) => response.json()
 		).then(
-		(json) => handleCompletion(json.details)
+			(json) => handleCompletion(json.details)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
 		);
 	}
 

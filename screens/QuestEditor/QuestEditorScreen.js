@@ -75,12 +75,17 @@ function QuestEditorScreen({ navigation, questsToShow }){
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: 'fn=getQuestCrumbs' + 
-				'&questId=' + route.params.questId
+			body: 'fn=getCrumbData' + 
+				'&questID=' + route.params.questId
 		}).then(
-		(response) => response.json()
+			(response) => response.json()
 		).then(
-		(json) => setCrumbsList(json.crumbs)
+			(json) => setCrumbsList(json.crumbs)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
 		);
 	};
 
@@ -92,12 +97,17 @@ function QuestEditorScreen({ navigation, questsToShow }){
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			body: 'fn=deleteCrumb' + 
-			'&crumbId=' + crumbId + 
-			'&questId=' + questDetails.id
+			'&crumbID=' + crumbId + 
+			'&questID=' + questDetails.id
 		}).then(
-		(response) => response.json()
+			(response) => response.json()
 		).then(
-		(json) => setCrumbsList(json.crumbs)
+			(json) => setCrumbsList(json.crumbs)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
 		);
 	};
 
@@ -109,11 +119,16 @@ function QuestEditorScreen({ navigation, questsToShow }){
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
 			body: 'fn=deleteQuest' + 
-				'&questId' + questId
+				'&questID=' + questId
 		}).then(
-		(response) => response.json()
+			(response) => response.json()
 		).then(
-		(json) => handleDeleteQuest(json.msg)
+			(json) => handleDeleteQuest(json.msg)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
 		);
 	};
 
