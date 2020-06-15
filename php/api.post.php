@@ -697,7 +697,7 @@
 
 					// Hash the password before storing it
 					// https://www.php.net/manual/en/function.password-hash.php
-					$password = password_hash($password, "PASSWORD_DEFAULT");
+					$password = password_hash($password, PASSWORD_DEFAULT);
 					
 					// if we got to this point, both the password fields match and the email and pass aren't already in use, so make the new account entry in the database
 					try {
