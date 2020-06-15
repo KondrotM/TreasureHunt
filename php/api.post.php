@@ -533,6 +533,9 @@
 		}
 
 		if ($_POST['fn'] == 'getQuestOverview') {
+			echo json_encode(["Type" => "Error", "msg" => "Unimplemented."]);
+			exit;
+			
 			$quest_id = ['questId'];
 			$user_id = ['userId'];
 

@@ -1,3 +1,6 @@
+function name (arguments) -> data it returns if successful. Order of arguments is not important as long as they are all labelled.
+
+
 createQuest(mapName, difficulty, description, lat, lng, userID) -> msg: "Quest created."
 
 getQuests() -> msg: "Quests returned.", quests: [{"questID": "4", "difficulty": "0"...}]
@@ -20,3 +23,6 @@ getQuestCrumbs(questID) -> msg: "Crumbs returned.", crumb: [{"crumbID": "0", "hi
 
 completeCrumb(crumbID, userID) -> msg: "Crumb marked as completed.", crumb: {"crumbID": "0", "hint": "foo"...}
 
+editQuest(questID, difficulty, mapName, description) -> msg: "Quest details updated."
+
+deleteCrumb(crumbID, questID) -> msg: "Crumb deleted.", crumbs: [{"crumbID": "0", "hint": "foo"...}]
