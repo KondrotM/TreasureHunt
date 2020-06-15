@@ -685,6 +685,7 @@
 					exit;
 				}
 
+				$dbRow = $dbQuery->fetch();
 				if ($dbRow['email'] == $email) {
 					// there is an entry found in the database that matches the email, so show an error that the email is already in use
 					echo json_encode(["Type" => "Error", "msg" => "Email already in use"]);

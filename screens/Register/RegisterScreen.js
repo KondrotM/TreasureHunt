@@ -5,28 +5,33 @@ import { Text, TextInput, View, Button} from 'react-native';
 
 // sends registration request and alerts response message
 function requestRegister( request ) {
-    fetch('https://thenathanists.uogs.co.uk/api.post.php', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: "fn="+request.fn +
-            "&username=" + request.username + 
-            "&password=" + request.password + 
-            "&email=" + request.email
-        }).then((response) => response.json()).then((responseJson) => alert(responseJson.msg));
-    }
+  fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: "fn=" + request.fn +
+          "&username=" + request.username + 
+          "&password=" + request.password + 
+          "&email=" + request.email
+      }).then(
+        (response) => response.json()
+      ).then(
+        (responseJson) => alert(responseJson.msg)
+      ).catch((error) => {
+        console.error('Error:', error);
+      });
+}
 
-function RegisterScreen(){
+function RegisterScreen() {
 
-    // usestate which holds registration details
-    const [registerDetails, setRegisterDetails] = useState({
-        fn: 'register',
-        username: '',
-        password: '',
-        email: '',
-    });
-
+  // usestate which holds registration details
+  const [registerDetails, setRegisterDetails] = useState({
+      fn: 'register',
+      username: '',
+      password: '',
+      email: '',
+  });
 
 	return (
       // page markup
