@@ -7,35 +7,36 @@ import MapView, { Marker } from 'react-native-maps';
 
 
 
-function sendBreadcrumb( request ){
-	// function to send breadcrumb to API, it will record it in the database
-	fetch('https://thenathanists.uogs.co.uk/api.post.php', {
-	  method: 'POST',
-	  headers: {
-	    'Content-Type': 'application/x-www-form-urlencoded'
-	  },
-	  body: "fn=" + request.fn +
-	  		"&name=" + request.name +
-	  		"&riddle=" + request.difficulty +
-	  		"&answer=" + request.description + 
-	  		"&hint=" + request.hint +
-	  		"&lat=" + request.lat +
-	  		"&lng=" + request.lng +
-	  		"&userID=" + global.id
-	}).then(
-		(response) => response.json()
-	).then(
-		(responseJson) => alert(responseJson.msg)
-	).catch(
-		(error) => {
-			console.error('Error:', error);
-			alert(error);
-		}
-	);
-}
 
 
 function CreateCrumbScreen({ navigation }) {
+	function sendBreadcrumb( request ){
+		// function to send breadcrumb to API, it will record it in the database
+		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
+		  method: 'POST',
+		  headers: {
+		    'Content-Type': 'application/x-www-form-urlencoded'
+		  },
+		  body: "fn=" + request.fn +
+		  		"&questID=" + route.params.quest.id + 
+		  		"&name=" + request.name +
+		  		"&riddle=" + request.difficulty +
+		  		"&answer=" + request.description + 
+		  		"&hint=" + request.hint +
+		  		"&lat=" + request.lat +
+		  		"&lng=" + request.lng +
+		  		"&userID=" + global.id
+		}).then(
+			(response) => response.json()
+		).then(
+			(responseJson) => alert(responseJson.msg)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
+		);
+	}
 	// function to export map creation screen, mk
 
 	// state hook containing map details
