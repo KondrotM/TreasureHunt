@@ -77,7 +77,7 @@
 
 					// we have a unique UUID now, so use it when adding the latitude and longitude to the database
 					try {
-						$dbQueryTwo = $db->prepare('INSERT INTO `tablelocations` (`locationUUID`, `latitude`, `longitude`) VALUES (:uuid, :lat, :lng)');
+						$dbQueryTwo = $db->prepare('INSERT INTO `locations` (`locationUUID`, `latitude`, `longitude`) VALUES (:uuid, :lat, :lng)');
 						$dbQueryTwo->execute(['lng' => $longitude, 'lat' => $latitude, 'uuid' => $uuid]);
 					} catch (PDOException $e) {
 						// If it fails, show the error and exit
