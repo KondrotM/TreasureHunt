@@ -4,7 +4,7 @@ import { Text, Button, TouchableHighlight, View, SafeAreaView, ScrollView, Alert
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-// import { useNavigation } from '@react-navigation/native';
+
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { MapScreen } from '../Map';
@@ -13,17 +13,18 @@ import { useRoute } from '@react-navigation/native'
 
 
 
-
-
-
 function QuestEditorScreen({ navigation, questsToShow }){
 
+
+	// Function to return markup of quest box,
+	// Quest box is used in this scenario to show breadcrumb overview
 	function QuestBox({navigation, title, id}) {
 		return (
 			<TouchableHighlight 
 				style={styles.questBox} >
 
 				<View style={{flex:1,flexDirection:'row',alignItems:'center'}}>
+
 
 					<View style={{flex:1, marginLeft: 15, alignItems:'flex-start'}}>
 						<FontAwesomeIcon icon={faMap} size={25} />
@@ -73,7 +74,8 @@ function QuestEditorScreen({ navigation, questsToShow }){
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: 'fn=getQuestCrumbs'
+			body: 'fn=getQuestCrumbs' + 
+				'&questId=' + route.params.questId
 		}).then(
 		(response) => response.json()
 		).then(
@@ -131,11 +133,20 @@ function QuestEditorScreen({ navigation, questsToShow }){
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
 		{/* Embedded react js code essentially acting as a for loop */}
-			{crumbsList.map((questInfo) => {
+			{crumbsList ? (
+			<>
+
+			{ crumbsList.map((questInfo) => {
 				return (
 					<QuestBox title={questInfo.name} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
 				);
-			})}
+			}) }
+
+			</>
+
+			) : (<> 
+			<Text style={{alignSelf:'center'}}> No breadcrumbs to show </Text>
+			</> ) }
 			</ScrollView>
 			</View>
 			<View style={{marginBottom: 10}}>

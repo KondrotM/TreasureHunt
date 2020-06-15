@@ -1,3 +1,4 @@
+// Created screens imported
 import SocialScreen from '../screens/Social';
 import LoginScreen from '../screens/Login';
 import CreateScreen from '../screens/Create';
@@ -7,58 +8,25 @@ import PlayScreen from '../screens/Play';
 import YourQuestsScreen from '../screens/YourQuests';
 
 import React, {useState, useEffect} from 'react';
+
+// React navigation imports
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import {createSwitchNavigator} from 'react-navigation';
 import { useRoute } from '@react-navigation/native'
 
-// const HomeStack = createStackNavigator()
+// Icons
+import { FontAwesome } from '@expo/vector-icons';
 
-// function myStack() {
-// 	return (
-// 		<Stack.Navigator>
-// 			<Stack.Screen name="Social" component={SocialScreen} />
-// 			<Stack.Screen name="Create" component={CreateScreen} />
-// 		</Stack.Navigator>
-// 		);
-// }
-
-
-
-// function myBottomTabs(){
-// 	return (
-// 		<Tab.Navigator>
-// 			<Tab.Screen name="Login" component={LoginScreen} />
-// 			<Tab.Screen name="Register" component={RegisterScreen} /> 
-// 		</Tab.Navigator>
-// 	);
-// }
-
-// const HomeStack = createStackNavigator({SocialScreen, CreateScreen})
-// const MainTabs = createBottomTabNavigator({HomeStack, LoginScreen})
-
-
-
-// const RootSwitch = createSwitchNavigator({ LoadingScreen, MainTabs});
-
-
-// function loginUser(){
-// 	const [isLoggedIn, setIsLoggedIn] = useState(false)
-
-// 	function logIn(){
-// 		setIsLoggedIn(true)
-// 	}
-
-// 	return [isLoggedIn, logIn]
-// }
-
-// export default MainTabs;
 const MainTabs = createBottomTabNavigator();
 
-global.id = '13';
+// Global param to handle user Id
+global.id = '1';
 
 export default function BottomTabNavigator({ navigation }){
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	// isLoggedIn toggles which navigation screen is shown
+	// (Logged in / Logged out)
+	const [isLoggedIn, setIsLoggedIn] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const route = useRoute();
@@ -66,6 +34,8 @@ export default function BottomTabNavigator({ navigation }){
 
 	useEffect(() => {
 		if (route.params){
+			// Page is re-navigated to through login button
+			// This allows a new value to be passed to the main page
 			if (route.params.login.msg.login == 'false') {
 				setIsLoggedIn(false);
 				global.id = '';
@@ -78,20 +48,13 @@ export default function BottomTabNavigator({ navigation }){
 	});
 
 	console.log(route.params);
-// export default class BottomTabNagivator extends React.Component {
-// 	constructor(){
-// 		super()
-// 		this.state = {
-// 			isLoggedIn : true
-// 		}
-// 	}
-// 	render(){
 
 	if (isLoading) {
 		return <LoadingScreen />;
 	}
 
 		return (
+			// Bottom tab navigator
 			<MainTabs.Navigator initlaRouteName = {'Login'}             tabBarOptions={{
                 activeTintColor: '#000', 
                 inactiveTintColor: '#777', 
@@ -103,16 +66,34 @@ export default function BottomTabNavigator({ navigation }){
 				<MainTabs.Screen
 				name = "Play"
 				component={PlayScreen}
+				options = {{
+					tabBarLabel: 'Play',
+					tabBarIcon: ({ color, size }) => (
+						<FontAwesome name="map" color={color} size={size} />
+				),
+				}}
 				/>
 
 				<MainTabs.Screen
 				name = "Create"
 				component={YourQuestsScreen}
+				options = {{
+					tabBarLabel: 'Create',
+					tabBarIcon: ({ color, size }) => (
+						<FontAwesome name="pencil-square" color={color} size={size} />
+				),
+				}}
 				/>
 
 				<MainTabs.Screen
 				name="Social"
 				component={SocialScreen}
+				options = {{
+					tabBarLabel: 'Social',
+					tabBarIcon: ({ color, size }) => (
+						<FontAwesome name="user" color={color} size={size} />
+				),
+				}}
 				/>
 				</>
 				) : (

@@ -55,7 +55,7 @@ function PlayScreen({ navigation, questsToShow }){
 		}).then(
 		(response) => response.json()
 		).then(
-		(json) => setQuestsList(json.maps)
+		(json) => setQuestsList(json.quests)
 		);
 	};
 
@@ -70,19 +70,28 @@ function PlayScreen({ navigation, questsToShow }){
 		<View style={styles.container}>
 			<View style = {styles.formContainer}>
 			<Text style={styles.titleText}> Quest Selection </Text>
-			<Text style={styles.smallText}> Showing Quests in Cheltenham </Text>
-			<View style={{height: 300, width: 300, marginBottom: 20}}>
+			<View style={{height: 450, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
 			<QuestBox diff='Easy' title='Fix this' id='2' navigation={navigation}/>
-		{/* Embedded react js code essentially acting as a for loop */}
-			{questsList.map((questInfo) => {
-				return (
-					<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
-				);
-			})}
+			{/* Embedded react js code essentially acting as a for 	loop */}
+			{/* '?' statement checks if questsList is empty or not */}
+			{questsList ? (
+			<>
+
+				{ questsList.map((questInfo) => {
+					return (
+						<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
+					);
+				}) }
+
+			</>
+
+			) : (
+			<> 
+			<Text> No quests to show </Text>
+			</> ) }
 			</ScrollView>
 			</View>
-			<Button title='History' color='#56B09C' onPress={() => navigation.navigate('Quest', {id: '5'})} />
 			</View>
 		</View>
 	);

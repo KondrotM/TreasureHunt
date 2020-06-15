@@ -41,12 +41,13 @@ function CreateScreen({ navigation }) {
 	// https://reactjs.org/docs/hooks-intro.html
 	// https://stackoverflow.com/a/54150873/13095638
 	const [mapDetails, setMapDetails] = useState({
-		fn: 'createMap',
+		fn: 'createQuest',
 		lat: 'None',
 		lng: 'None',
 		difficulty: '',
 		description: '',
-		name: ''
+		name: '',
+		userId: global.id
 	});
 
 	// route used for passing variables between screen navigation
@@ -117,9 +118,9 @@ function CreateScreen({ navigation }) {
 				onValueChange={(itemValue, itemIndex) =>
 					setMapDetails({...mapDetails, difficulty: itemValue})
 				}>
-				<Picker.Item label="Beginner" value="beginner" />
-				<Picker.Item label="Intermediate" value="intermediate" />
-				<Picker.Item label="Difficult" value="difficult" />
+				<Picker.Item label="Easy" value="easy" />
+				<Picker.Item label="Medium" value="medium" />
+				<Picker.Item label="Hard" value="hard" />
 			</Picker>
 
 			<Text style={styles.heading}>Initial Co-ordinates:</Text>

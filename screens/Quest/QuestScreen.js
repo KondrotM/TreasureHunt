@@ -13,7 +13,7 @@ function QuestScreen({navigation}){
 	const route = useRoute();
 
 	function getCrumbDetails() {
-		console.log('what');
+		// function sends a post request to get the specific crumb details to show on the screen
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
 			headers: {
@@ -26,9 +26,11 @@ function QuestScreen({navigation}){
 	}
 
 	useEffect(() => {
+		// Effect to get crumb details on page load
 		getCrumbDetails();
 	}, [])
 
+		// Geolocation usage from https://heartbeat.fritz.ai/how-to-use-the-geolocation-api-in-a-react-native-app-b5e611b00a0c
 	const [location, setLocation] = useState(null);
 	const [errorMsg, setErrorMsg] = useState(null);
 
@@ -59,6 +61,7 @@ function QuestScreen({navigation}){
 
 
 
+	// Variable containing all the necessary details for a full crumb view
 	const [playQuest, setPlayQuest] = useState({
 		questId: '2',
 		crumbId: '1',
@@ -74,8 +77,11 @@ function QuestScreen({navigation}){
 		lng: 0
 	})
 
+	// Guess which the player makes
 	const [guess, setGuess] = useState('')
 
+	// Function to show the user the riddle
+	// Calculates euclidean distance to check if user is close enough
 	function viewRiddle() {
 		var diffLat = lat - playQuest.lat;
 		var diffLng = lng - playQuest.lng;
@@ -89,6 +95,7 @@ function QuestScreen({navigation}){
 		}
 	}
 
+	// Function which calls for crumb completion, calls to handleCompletion once a response is recieved
 	function completeCrumb() {
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
@@ -101,25 +108,34 @@ function QuestScreen({navigation}){
 		}).then(
 		(response) => response.json()
 		).then(
-		(json) => setPlayQuest(json.details)
+		(json) => handleCompletion(json.details)
 		);
 	}
 
-	function correctAnswer() {
-		completeCrumb();
-		alert('Correct Answer!');
+	// Sets the quest crumb details and checks if the quest is completed
+	function handleCompletion(detials) {
+		setPlayQuest(details);
 
-		if (playQuest.crumbPos > playQuest.totalCrumbs) { 
+		if (playQuest.crumbPos >= playQuest.totalCrumbs) { 
 			alert('Quest completed, congratulations!');
 			navigation.navigate('Play');
 		}
+
 	}
 
+	// Function fired if player guesses correct answer
+	function correctAnswer() {
+		completeCrumb();
+		alert('Correct Answer!');
+	}
+
+	// Function fired if the player gives up on crumb
 	function giveUpCrumb() {
 		completeCrumb();
 		alert('Crumb given up');
 	}
 
+	// Function fired when player attemps a guess
 	function answerRiddle() {
 		if (guess.toLowerCase() == playQuest.answer.toLowerCase()) {
 			correctAnswer();
@@ -129,25 +145,7 @@ function QuestScreen({navigation}){
 		}
 	}
 
-	function answerRiddle1() {
-
-		Alert.prompt(
-			"Answer Riddle",
-			"Enter your answer to the riddle",
-			[
-				{
-					text: "Cancel",
-					style: "cancel"
-				},
-				{
-					text: "Submit",
-					onPress: guess => guessAnswer(guess)
-				}
-			]
-		);
-
-	}
-
+	// Gives the player a hint of they are on easy mode
 	function getHint() {
 		if (playQuest.difficulty.toLowerCase() == 'easy') {
 			alert(playQuest.hint);
@@ -156,6 +154,7 @@ function QuestScreen({navigation}){
 		}
 	}
 
+	// Prompts the user if they want to give up, provided they are not on hard mode
 	function giveUp() {
 		if (playQuest.difficulty.toLowerCase != 'hard'){
 			Alert.alert('Are you sure?','Are you sure you want to give up?',[
@@ -173,12 +172,6 @@ function QuestScreen({navigation}){
 		}
 	}
 
-	const testLat = 52.95;
-	const testLng = -1.2;
-
-
-
-
 
     return (
       <ScrollView contentContainerStyle={styles.container}>
@@ -191,8 +184,8 @@ function QuestScreen({navigation}){
 					longitude: route.params.lng,
 
 					// The deltas are used for the zoom level.
-					latitudeDelta: 1,
-					longitudeDelta: 1,
+					latitudeDelta: 0.05,
+					longitudeDelta: 0.05,
 				}}
 				style={styles.map}
 				customMapStyle={customMapStyle}
@@ -224,11 +217,6 @@ function QuestScreen({navigation}){
 		<View style={{marginTop: 10}}>
 		</View>
 		</View>
-
-	{/*submit riddle
-		php functions
-		chilliin
-	*/}
 
       </ScrollView>
     );
