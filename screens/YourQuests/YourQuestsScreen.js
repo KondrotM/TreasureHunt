@@ -40,24 +40,29 @@ function QuestBox({navigation, title, diff, id}) {
 
 function PlayScreen({ navigation, questsToShow }){
 
-	// State hook which holds quest information, mk
+	// State hook which holds quest information
 	const [questsList, setQuestsList] = useState([
 		]);
 
 
-	// asynchronous function which updates questsList on response, mk
+	// asynchronous function which updates questsList on response
 	function getQuests(){
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: 'fn=getUserQuests'
+			body: 'fn=getUserQuests' + '&userID=' + global.id
 			// body: 'fn=getQuests'
 		}).then(
-		(response) => response.json()
+			(response) => response.json()
 		).then(
-		(json) => setQuestsList(json.quests)
+			(json) => setQuestsList(json.quests)
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
+			}
 		);
 	};
 

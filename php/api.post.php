@@ -423,12 +423,12 @@
 					exit;
 				}
 	
-				$questsObj;
-				$dbRow = $dbQuery->fetch();
-				while ($dbRow) { // for each row returned, add it to the questsObj
-					$questsObj += $dbRow;
-				}
-				echo json_encode(["Type" => "Success", "msg" => "Quests returned.", "quests" => $questsObj]);
+				$questsObj = $dbQuery->fetchAll();
+				$output = str_replace(array("\r\n", "\n", "\r"),'',$questsObj);
+				$jsonEncode = json_encode(["Type" => "Success", "msg" => "Quests returned.", "quests" => $output]);
+				$output_json = preg_replace("!\r?\n!","", $jsonEncode);
+				echo $output_json;
+				exit;
 			}
 
 			/*
