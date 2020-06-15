@@ -60,7 +60,7 @@ function PlayScreen({ navigation, questsToShow }){
 				try {
 					setQuestsList(json.quests)
 				} catch(e) {
-					console.log("No quests found");
+					alert("No quests found");
 				}
 			}
 		);
