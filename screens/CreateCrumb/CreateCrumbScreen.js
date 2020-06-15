@@ -21,8 +21,17 @@ function sendBreadcrumb( request ){
 	  		"&hint=" + request.hint +
 	  		"&lat=" + request.lat +
 	  		"&lng=" + request.lng +
-	  		"&id=" + global.id
-	}).then((response) => response.json()).then((responseJson) => alert(responseJson.msg));
+	  		"&userID=" + global.id
+	}).then(
+		(response) => response.json()
+	).then(
+		(responseJson) => alert(responseJson.msg)
+	).catch(
+		(error) => {
+			console.error('Error:', error);
+			alert(error);
+		}
+	);
 }
 
 

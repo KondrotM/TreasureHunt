@@ -78,13 +78,13 @@ function PlayScreen({ navigation, questsToShow }){
 			<Text style={styles.titleText}> Your Quests </Text>
 			<View style={{height: 300, width: 300, marginBottom: 20}}>
 			<ScrollView style={styles.scrollView}>
-		{/* Embedded react js code essentially acting as a for loop */}
+			{/* Embedded react js code essentially acting as a for loop */}
 			{questsList ? (
 			<>
 
 			{ questsList.map((questInfo) => {
 				return (
-					<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
+					<QuestBox diff={questInfo.difficulty} title={questInfo.mapName} id={questInfo.questID} key={questInfo.questID} navigation = {navigation}/>
 				);
 			}) }
 

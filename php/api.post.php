@@ -273,7 +273,7 @@
 			echo json_encode(["Type" => "Success", "msg" => "Map Details Updated"]);
 		}
 
-				if ($_POST['fn'] == 'getCrumbDetails') {
+		if ($_POST['fn'] == 'getCrumbDetails') {
 			$quest_id = $_POST['questId'];
 			$user_id = $_POST['userId'];
 
