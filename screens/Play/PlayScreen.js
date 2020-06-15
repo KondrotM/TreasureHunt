@@ -46,7 +46,7 @@ function PlayScreen({ navigation, questsToShow }){
 
 
 	// asynchronous function which updates questsList on response
-	function getQuests(){
+	function getQuests() {
 		fetch('https://thenathanists.uogs.co.uk/api.post.php', {
 			method: 'POST',
 			headers: {
@@ -62,6 +62,11 @@ function PlayScreen({ navigation, questsToShow }){
 				} catch(e) {
 					alert("No quests found");
 				}
+			}
+		).catch(
+			(error) => {
+				console.error('Error:', error);
+				alert(error);
 			}
 		);
 	};

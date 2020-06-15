@@ -114,11 +114,7 @@
 				exit;
 			}
 
-			$questsObj;
-			$dbRow = $dbQuery->fetch();
-			while ($dbRow) { // for each row returned, add it to the questsObj
-				$questsObj += $dbRow;
-			}
+			$questsObj = $dbQuery->fetchAll();
 			echo json_encode(["Type" => "Success", "msg" => "Quests returned.", "quests" => $questsObj]);
 
 			/*
