@@ -92,7 +92,7 @@ function PlayScreen({ navigation, questsToShow }){
 
 				{ questsList.map((questInfo) => {
 					return (
-						<QuestBox diff={questInfo.diff} title={questInfo.title} id={questInfo.id} key={questInfo.id} navigation = {navigation}/>
+						<QuestBox diff={questInfo.difficulty} title={questInfo.mapName} id={questInfo.questID} key={questInfo.questID} navigation = {navigation}/>
 					);
 				}) }
 
